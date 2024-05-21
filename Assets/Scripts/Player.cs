@@ -22,11 +22,12 @@ public class Player : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        movement = new Vector3(horizontal, rb.velocity.y, vertical).normalized;
+        movement = new Vector3(horizontal, 0, vertical);
+        movement = movement.normalized * playerSpeed * Time.deltaTime;
     }
     void FixedUpdate()
     {
-        rb.velocity = movement * playerSpeed;
+        rb.MovePosition(transform.position + movement);
        
     }
 }
