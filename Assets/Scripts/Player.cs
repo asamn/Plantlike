@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         movement = new Vector3(horizontal, 0, vertical);
-        movement = movement.normalized * playerSpeed * Time.deltaTime;
+        movement = movement.normalized * playerSpeed * Time.fixedDeltaTime;
     }
     void FixedUpdate()
     {
