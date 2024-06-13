@@ -1,100 +1,138 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-
-    [SerializeField] private float playerSpeed = 2.0f;
-    [SerializeField] private float rotationSpeed = 5.0f; // Rotation speed multiplier
-
-    [SerializeField] private GameObject bullet;
-    public bool useGamepadControls = true; // Boolean for controlling input method
-    
-
+    [SerializeField] private float playerSpeed = .2f;
+    [SerializeField] private float rotationSpeed = 5.0f;
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawnPoint;
+    [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
 
     private Rigidbody rb;
     private Vector3 movement;
-    private Camera mainCamera;
+    private Vector3 aimDirection;
 
-    private Quaternion playerRotation;
-
-
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main;
-        playerRotation.x = 0;
-        playerRotation.z = 0;
-        playerRotation = playerRotation.normalized;
+        rb.freezeRotation = true; // Prevent rotation affecting movement
+        rb.interpolation = RigidbodyInterpolation.Interpolate; // Smoothing the movement
     }
 
     void Update()
+    {
+        HandleInput();
+    }
+
+    void FixedUpdate()
+    {
+        ApplyMovement();
+        ApplyRotation();
+    }
+
+    private void HandleInput()
+    {
+        if (useGamepad)
+        {
+            HandleGamepadInput();
+            if (Input.GetButtonDown("FireGamepad")) // Use right bumper for gamepad fire button
+            {
+                // Debug.Log("Right Bumper Pressed"); // Debug log
+                FireProjectile();
+            }
+        }
+        else
+        {
+            HandleKeyboardMouseInput();
+            if (Input.GetMouseButtonDown(0)) // Left mouse button for firing
+            {
+                FireProjectile();
+            }
+        }
+    }
+
+    private void HandleGamepadInput()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        // Implementing a dead zone cuz apparently thats what you do
+        if (Mathf.Abs(horizontal) < 0.1f) horizontal = 0;
+        if (Mathf.Abs(vertical) < 0.1f) vertical = 0;
+
+        movement = new Vector3(horizontal, 0, vertical);
+        if (movement.sqrMagnitude > 1)
+        {
+            movement.Normalize();
+        }
+        movement *= playerSpeed;
+
+        float aimHorizontal = Input.GetAxis("Right Stick Horizontal");
+        float aimVertical = Input.GetAxis("Right Stick Vertical");
+
+        // Implementing a dead zone for aiming
+        if (Mathf.Abs(aimHorizontal) < 0.1f) aimHorizontal = 0;
+        if (Mathf.Abs(aimVertical) < 0.1f) aimVertical = 0;
+
+        // Inverting the vertical axis for aiming
+        aimDirection = new Vector3(aimHorizontal, 0, -aimVertical);
+    }
+
+    private void HandleKeyboardMouseInput()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
         movement = new Vector3(horizontal, 0, vertical);
-        movement = movement.normalized * playerSpeed * Time.fixedDeltaTime;
-
-        // Aiming input
-        Vector3 aimDirection = Vector3.zero;
-        if (useGamepadControls)
+        if (movement.sqrMagnitude > 1)
         {
-            float aimHorizontal = Input.GetAxis("Right Stick Horizontal");
-            float aimVertical = Input.GetAxis("Right Stick Vertical");
-            aimDirection = new Vector3(aimHorizontal, 0.0f, aimVertical).normalized;
+            movement.Normalize();
         }
-        else
-        {
-            // Use mouse input for aiming
-            Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-            float rayLength;
+        movement *= playerSpeed;
 
-            if (groundPlane.Raycast(cameraRay, out rayLength))
-            {
-                Vector3 pointToLook = cameraRay.GetPoint(rayLength);
-                aimDirection = pointToLook - transform.position;
-                aimDirection.y = 0; // Keep aim direction parallel to ground
-            }
+        // Mouse aiming
+        Plane playerPlane = new Plane(Vector3.up, transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float hitDist = 0.0f;
+
+        if (playerPlane.Raycast(ray, out hitDist))
+        {
+            Vector3 targetPoint = ray.GetPoint(hitDist);
+            aimDirection = targetPoint - transform.position;
+            aimDirection.y = 0; // Keep aiming on the horizontal plane
         }
+    }
 
-        // Ensure there is a significant input before updating rotation.
-        if (aimDirection.sqrMagnitude > 0.01f)  // Using a small threshold instead of dead zone
+    private void ApplyMovement()
+    {
+        rb.velocity = movement;
+    }
+
+    private void ApplyRotation()
+    {
+        if (aimDirection.sqrMagnitude > 0.01f) // There is significant input from the right stick or mouse aiming
         {
-            // Calculate the target rotation based on the aim direction
             Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
-            targetRotation.x = 0;
-            targetRotation.z = 0;
-
-
-            // Smoothly interpolate towards the target rotation
-             playerRotation = Quaternion.Lerp(rb.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
-
-
-         if (Input.GetMouseButtonDown(0)) //LMB
-         {
-            fireProjectile();
-         }
-
+        else if (movement.sqrMagnitude > 0.01f) // No aiming input, use movement direction
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
     }
 
-    //fixed update is better for applying physics calculations
-    void FixedUpdate()
+    private void FireProjectile()
     {
-        //apply movement
-        rb.MovePosition(transform.position + movement);
-        rb.MoveRotation(playerRotation);
-       
+        if (bulletPrefab && bulletSpawnPoint)
+        {
+            Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+        }
+        else if (bulletPrefab)
+        {
+            Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
+        }
     }
-
-    void fireProjectile()
-    {
-        Instantiate(bullet, transform.position + transform.TransformDirection(Vector3.forward * 1.5f) , transform.rotation);
-    }
-
 }
