@@ -15,6 +15,8 @@ public class Projectile : MonoBehaviour
     void FixedUpdate()
     {
         transform.Translate(Vector3.forward * projectileSpeed * Time.deltaTime);
+
+        //maybe add a timer to de-spawn bullets that somehow clip out the map and travel endlessly  
     }
 
     void OnCollisionEnter(Collision collision)
@@ -28,8 +30,8 @@ public class Projectile : MonoBehaviour
             }
 
             Destroy(this.gameObject);
-
         }
+
 
         
     }
