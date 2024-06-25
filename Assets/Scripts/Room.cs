@@ -8,15 +8,11 @@ public class Room : MonoBehaviour
     [SerializeField] int size = 1;
 
     private float leeway = 2.5f; //provides some leeway when detecting overlapping rooms, higher means smaller bounding box, default is 2.5f
-
-
-
     bool m_Started;
     public LayerMask m_LayerMask;
-    private Bounds debugBounds;
+    private Bounds roomBounds;
 
     private GameObject layer2;
-
 
     void Awake()
     {
@@ -34,8 +30,8 @@ public class Room : MonoBehaviour
 
     public bool isOverlapping()
     {
-        debugBounds = GetBounds();
-        Collider[] hitColliders = Physics.OverlapBox(debugBounds.center, debugBounds.size / leeway, Quaternion.identity, m_LayerMask);
+        roomBounds = GetBounds();
+        Collider[] hitColliders = Physics.OverlapBox(roomBounds.center, roomBounds.size / leeway, Quaternion.identity, m_LayerMask);
         foreach (Collider c in hitColliders)
         {
             if (!c.gameObject.transform.IsChildOf(this.transform)) //ignore block terrains of this room
@@ -48,7 +44,7 @@ public class Room : MonoBehaviour
         return false;
     }
 
-    //Draw the Box Overlap as a gizmo to show where it currently is testing. Click the Gizmos button to see this
+    //Debug drawings
     void OnDrawGizmos()
     {
         //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
@@ -56,10 +52,10 @@ public class Room : MonoBehaviour
         {
             /*
             // bottom
-            var p1 = new Vector3(debugBounds.min.x, debugBounds.min.y, debugBounds.min.z);
-            var p2 = new Vector3(debugBounds.max.x, debugBounds.min.y, debugBounds.min.z);
-            var p3 = new Vector3(debugBounds.max.x, debugBounds.min.y, debugBounds.max.z);
-            var p4 = new Vector3(debugBounds.min.x, debugBounds.min.y, debugBounds.max.z);
+            var p1 = new Vector3(roomBounds.min.x, roomBounds.min.y, roomBounds.min.z);
+            var p2 = new Vector3(roomBounds.max.x, roomBounds.min.y, roomBounds.min.z);
+            var p3 = new Vector3(roomBounds.max.x, roomBounds.min.y, roomBounds.max.z);
+            var p4 = new Vector3(roomBounds.min.x, roomBounds.min.y, roomBounds.max.z);
 
             Gizmos.color = Color.red;
 
@@ -69,10 +65,10 @@ public class Room : MonoBehaviour
             Gizmos.DrawLine(p4, p1);
 
             // top
-            var p5 = new Vector3(debugBounds.min.x, debugBounds.max.y, debugBounds.min.z);
-            var p6 = new Vector3(debugBounds.max.x, debugBounds.max.y, debugBounds.min.z);
-            var p7 = new Vector3(debugBounds.max.x, debugBounds.max.y, debugBounds.max.z);
-            var p8 = new Vector3(debugBounds.min.x, debugBounds.max.y, debugBounds.max.z);
+            var p5 = new Vector3(roomBounds.min.x, roomBounds.max.y, roomBounds.min.z);
+            var p6 = new Vector3(roomBounds.max.x, roomBounds.max.y, roomBounds.min.z);
+            var p7 = new Vector3(roomBounds.max.x, roomBounds.max.y, roomBounds.max.z);
+            var p8 = new Vector3(roomBounds.min.x, roomBounds.max.y, roomBounds.max.z);
 
             Gizmos.DrawLine(p5, p6);
             Gizmos.DrawLine(p6, p7);
@@ -86,9 +82,9 @@ public class Room : MonoBehaviour
             Gizmos.DrawLine(p4, p8);
             */
 
+            //debug drawing
 
-
-            Gizmos.DrawWireCube(debugBounds.center, debugBounds.size / (leeway / 2));
+            Gizmos.DrawWireCube(roomBounds.center, roomBounds.size / (leeway / 2));
         }
     }
 
@@ -104,9 +100,6 @@ public class Room : MonoBehaviour
         }
         return b;
     }
-
-
-    
 
     public GameObject GetNorthMarker()
     {

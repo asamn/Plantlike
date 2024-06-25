@@ -17,15 +17,16 @@ public class LevelGen : MonoBehaviour
     //separate pools for east to west, north to south
     [SerializeField] private GameObject[] NSConnectorPool, EWConnectorPool;
 
-    private Queue<GameObject> markerQueue; 
+    private List<GameObject> markerList; 
 
     // Start is called before the first frame update
     void Start()
     {
-        markerQueue = new Queue<GameObject>();
+        markerList = new List<GameObject>();
         //the markers of each room should be stored in layer 2 
         GameObject layer2 = startingRoom.transform.Find("Layer2").gameObject; 
 
+        //add the starting room markers to the starting list
         for (int i = 0; i < layer2.transform.childCount; i++)
         {   
             GameObject currentChild = layer2.transform.GetChild(i).gameObject;
@@ -33,28 +34,30 @@ public class LevelGen : MonoBehaviour
             switch(currentChild.tag) 
             {
             case "North":
-                markerQueue.Enqueue(currentChild);
+                markerList.Add(currentChild);
                 break;
             case "East":
-                markerQueue.Enqueue(currentChild);
+                markerList.Add(currentChild);
                 break;
             case "South":
-                markerQueue.Enqueue(currentChild);
+                markerList.Add(currentChild);
                 break;
             case "West":
-                markerQueue.Enqueue(currentChild);
+                markerList.Add(currentChild);
                 break;
             default:
                 //don't add this to the queue
                 break;
             }
-
         }
-        //print(markerQueue);
-        while (markerQueue.Count > 0)
+
+        while (markerList.Count > 0)
         {
-            
-            GameObject currentMarker = markerQueue.Dequeue();
+            //process a random marker, upper bound of random.range is exclusive for ints
+            int rng = Random.Range(0,markerList.Count);
+            GameObject currentMarker = markerList[rng];
+            markerList.RemoveAt(rng);
+
             Marker m = currentMarker.GetComponent<Marker>();
             m.setVisited();
 
@@ -68,22 +71,19 @@ public class LevelGen : MonoBehaviour
             //connectors do not count towards roomCount
             roomCount--;
 
-
             GameObject currentConnector = null;
             GameObject currentRoom = null;
             GameObject connectorMarker = null;
 
-
-            //todo: make random
-            int rngConnector = 0;
-            int rngRoom = 0;
+            //random connector, make sure there is an equal amount of NS and EW connectors
+            rng = Random.Range(0,NSConnectorPool.Length);
             
             Vector3 spawnPosition = currentMarker.transform.position;
 
             //place connectors, NORTH IS Z POSITIVE, EAST IS X POSITIVE
             if (m.getDir() == Direction.North)
             {
-                currentConnector = Instantiate(NSConnectorPool[rngConnector], currentMarker.transform.position, currentMarker.transform.rotation);
+                currentConnector = Instantiate(NSConnectorPool[rng], currentMarker.transform.position, currentMarker.transform.rotation);
                 spawnPosition.z += currentMarker.transform.position.z - currentConnector.GetComponent<Room>().GetSouthMarker().transform.position.z - 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.x += currentMarker.transform.position.x - currentConnector.GetComponent<Room>().GetSouthMarker().transform.position.x;
@@ -93,7 +93,7 @@ public class LevelGen : MonoBehaviour
             }
             else if (m.getDir() == Direction.East)
             {
-                currentConnector = Instantiate(EWConnectorPool[rngConnector], currentMarker.transform.position, currentMarker.transform.rotation);
+                currentConnector = Instantiate(EWConnectorPool[rng], currentMarker.transform.position, currentMarker.transform.rotation);
                 spawnPosition.x += currentMarker.transform.position.x - currentConnector.GetComponent<Room>().GetWestMarker().transform.position.x - 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.z += currentMarker.transform.position.z - currentConnector.GetComponent<Room>().GetWestMarker().transform.position.z;
@@ -103,7 +103,7 @@ public class LevelGen : MonoBehaviour
             }
             else if (m.getDir() == Direction.South)
             {
-                currentConnector = Instantiate(NSConnectorPool[rngConnector], currentMarker.transform.position, currentMarker.transform.rotation);
+                currentConnector = Instantiate(NSConnectorPool[rng], currentMarker.transform.position, currentMarker.transform.rotation);
                 spawnPosition.z += currentMarker.transform.position.z - currentConnector.GetComponent<Room>().GetNorthMarker().transform.position.z + 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.x += currentMarker.transform.position.x - currentConnector.GetComponent<Room>().GetNorthMarker().transform.position.x;
@@ -113,37 +113,49 @@ public class LevelGen : MonoBehaviour
             }
             else if (m.getDir() == Direction.West)
             {
-                currentConnector = Instantiate(EWConnectorPool[rngConnector], currentMarker.transform.position, currentMarker.transform.rotation);
+                currentConnector = Instantiate(EWConnectorPool[rng], currentMarker.transform.position, currentMarker.transform.rotation);
                 spawnPosition.x += currentMarker.transform.position.x - currentConnector.GetComponent<Room>().GetEastMarker().transform.position.x + 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.z += currentMarker.transform.position.z - currentConnector.GetComponent<Room>().GetWestMarker().transform.position.z;
                 
                 connectorMarker = currentConnector.GetComponent<Room>().GetWestMarker();
             }
-            currentConnector.name = "Connector: " + markerQueue.Count;
+            else
+            {
+                print("ERROR! DIRECTION NOT FOUND!");
+                break;
+            }
+            
+            //currentConnector.name = "Connector: " + markerList.Count;
 
             if(currentConnector != null)
             {
                 currentConnector.transform.position = spawnPosition;
+            }
+            else
+            {
+                print("ERROR! CURRENT CONNECTOR IS NULL!");
+                break;
             }
 
             //very important, otherwise physics system may not properly recognize overlaps
             //fix source: https://forum.unity.com/threads/solved-strange-behavior-with-overlapbox.833299/ by Baste
             Physics.SyncTransforms();
             
-            //print("OVERLAP?:" + currentConnector.GetComponent<Room>().isOverlapping());
-
-            if (currentConnector != null && currentConnector.GetComponent<Room>().isOverlapping())
+            //Check overlap of the spawned connector
+            if (currentConnector.GetComponent<Room>().isOverlapping())
             {
-                print("OVERLAP!");
-                //Destroy(currentConnector);
-                continue; //do not run below code,
+                print("OVERLAP! CONNECTOR");
+                m.fillWall();
+                roomCount++; //retry the room
+                Destroy(currentConnector);
+                continue; //do not run below code, 
             }
 
             //start spawning the room
-
+            rng = Random.Range(0, roomPool.Length);
             spawnPosition = connectorMarker.transform.position;
-            currentRoom = Instantiate(roomPool[rngRoom], connectorMarker.transform.position, connectorMarker.transform.rotation);
+            currentRoom = Instantiate(roomPool[rng], connectorMarker.transform.position, connectorMarker.transform.rotation);
             
             switch(connectorMarker.tag) 
             {
@@ -172,18 +184,50 @@ public class LevelGen : MonoBehaviour
                 break;
             }
 
-            currentRoom.transform.position = spawnPosition;
+            if (currentRoom != null)
+            {
+                currentRoom.transform.position = spawnPosition;
+            }
+            else
+            {
+                print("ERROR! CURRENT ROOM IS NULL!");
+                break;
+            }
 
-           //TODO: handle room overlaps, fill walls of remaining unvisited markers
-            
-            //currentMarker.GetComponent<Marker>().fillWall();
+            Physics.SyncTransforms(); //important
+
+            //Check overlap of the spawned room, also destroy the connector 
+            if (currentRoom.GetComponent<Room>().isOverlapping())
+            {
+                print("OVERLAP!");
+                m.fillWall();
+                roomCount++; //retry the room
+                Destroy(currentRoom);
+                Destroy(currentConnector); //destroy this as well
+                continue; //do not run below code, 
+            }
+
+            //on success, add the room's markers to the process list
+            if(connectorMarker.tag != "South")
+            {
+                markerList.Add(currentRoom.GetComponent<Room>().GetNorthMarker());
+            }
+            if(connectorMarker.tag != "North")
+            {
+                markerList.Add(currentRoom.GetComponent<Room>().GetSouthMarker());
+            }
+            if(connectorMarker.tag != "West")
+            {
+                markerList.Add(currentRoom.GetComponent<Room>().GetEastMarker());
+            }
+            if(connectorMarker.tag != "East")
+            {
+                markerList.Add(currentRoom.GetComponent<Room>().GetWestMarker());
+            }
         }
 
-
-        //print("OVERLAP: " + startingRoom.GetComponent<Room>().isOverlapping());
-
+        
     }
-
 
     // Update is called once per frame
     void Update()
