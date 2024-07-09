@@ -11,7 +11,8 @@ public class EnemySpawnBlock : MonoBehaviour
 
     private int rng = 0;
 
-    void Start()
+    //after the first frame
+    void Update()
     {
         spawnRng = Random.Range(0.0f, 1.0f);
         //print("RNG: " + spawnRng + " CHANCE: " + spawnChance + "TRUE?: " + (spawnRng < spawnChance));
@@ -22,12 +23,6 @@ public class EnemySpawnBlock : MonoBehaviour
             rng = Random.Range(0,enemyPool.Length);
             Instantiate(enemyPool[rng], this.gameObject.transform.position, this.gameObject.transform.rotation);
         }
-
-    }
-
-    //after the first frame
-    void Update()
-    {
         Destroy(this.gameObject);
     }
 }

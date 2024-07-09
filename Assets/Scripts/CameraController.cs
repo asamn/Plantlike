@@ -3,8 +3,8 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Transform player; // Assign the player's Transform in the Inspector
-    public Vector3 offset = new Vector3(0, 10, -10); // Adjust this to get the desired camera angle
-    public float smoothTime = 50f; // Lower value for quicker response, higher for smoother follow
+    public Vector3 offset = new Vector3(0, 50, -10); // Adjust this to get the desired camera angle
+    public float smoothTime = 20f; // Lower value for quicker response, higher for smoother follow
     private Vector3 velocity = Vector3.zero;
 
     void LateUpdate()

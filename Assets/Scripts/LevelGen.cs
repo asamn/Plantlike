@@ -13,13 +13,15 @@ public class LevelGen : MonoBehaviour
     [SerializeField] private GameObject startingRoom;
 
     [SerializeField] private GameObject[] roomPool;
+    [SerializeField] private GameObject bossRoom;
     [SerializeField] private int roomCount;
     //separate pools for east to west, north to south
     [SerializeField] private GameObject[] NSConnectorPool, EWConnectorPool;
 
     private List<GameObject> markerList; 
+    
 
-    // Start is called before the first frame update
+    // Awake 
     void Start()
     {
         markerList = new List<GameObject>();
@@ -153,28 +155,57 @@ public class LevelGen : MonoBehaviour
             }
 
             //start spawning the room
-            rng = Random.Range(0, roomPool.Length);
+            if (roomCount == 0) //spawn the boss room last
+            {
+                print("Spawning boss room... ");
+                currentRoom = Instantiate(bossRoom, connectorMarker.transform.position, connectorMarker.transform.rotation);
+            }
+            else
+            {
+                rng = Random.Range(0, roomPool.Length);
+                currentRoom = Instantiate(roomPool[rng], connectorMarker.transform.position, connectorMarker.transform.rotation);
+            }
+            
             spawnPosition = connectorMarker.transform.position;
-            currentRoom = Instantiate(roomPool[rng], connectorMarker.transform.position, connectorMarker.transform.rotation);
             
             switch(connectorMarker.tag) 
             {
             case "North":
+                if (currentRoom.GetComponent<Room>().GetSouthMarker() == null) //if the room trying to spawn doesn't have a south connection point, don't bother spawning it, it will count as an overlap
+                {
+                    spawnPosition = startingRoom.transform.position; //force overlap
+                    break;
+                }
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetSouthMarker().transform.position.z - 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetSouthMarker().transform.position.x;
                 break;
             case "East":
+                if (currentRoom.GetComponent<Room>().GetWestMarker() == null)
+                {
+                    spawnPosition = startingRoom.transform.position; //force overlap
+                    break;
+                }
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetWestMarker().transform.position.x - 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetWestMarker().transform.position.z;
                 break;
             case "South":
+                if (currentRoom.GetComponent<Room>().GetNorthMarker() == null)
+                {
+                    spawnPosition = startingRoom.transform.position; //force overlap
+                    break;
+                }
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetNorthMarker().transform.position.z + 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetNorthMarker().transform.position.x;
                 break;
             case "West":
+                if (currentRoom.GetComponent<Room>().GetEastMarker() == null)
+                {
+                    spawnPosition = startingRoom.transform.position; //force overlap
+                    break;
+                }
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetEastMarker().transform.position.x + 1; //adjust 
                 //make sure the rooms align
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetEastMarker().transform.position.z;
@@ -208,30 +239,23 @@ public class LevelGen : MonoBehaviour
             }
 
             //on success, add the room's markers to the process list
-            if(connectorMarker.tag != "South")
+            //don't add the room's already proccessed side 
+            if(connectorMarker.tag != "South" && currentRoom.GetComponent<Room>().GetNorthMarker() != null)
             {
-                markerList.Add(currentRoom.GetComponent<Room>().GetNorthMarker());
+                markerList.Add(currentRoom.GetComponent<Room>().GetNorthMarker());   
             }
-            if(connectorMarker.tag != "North")
+            if(connectorMarker.tag != "North" && currentRoom.GetComponent<Room>().GetSouthMarker() != null)
             {
                 markerList.Add(currentRoom.GetComponent<Room>().GetSouthMarker());
             }
-            if(connectorMarker.tag != "West")
+            if(connectorMarker.tag != "West" && currentRoom.GetComponent<Room>().GetEastMarker() != null)
             {
                 markerList.Add(currentRoom.GetComponent<Room>().GetEastMarker());
             }
-            if(connectorMarker.tag != "East")
+            if(connectorMarker.tag != "East" && currentRoom.GetComponent<Room>().GetWestMarker() != null)
             {
-                markerList.Add(currentRoom.GetComponent<Room>().GetWestMarker());
+                markerList.Add(currentRoom.GetComponent<Room>().GetWestMarker());   
             }
         }
-
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //print("OVERLAP: " + startingRoom.GetComponent<Room>().isOverlapping());
     }
 }

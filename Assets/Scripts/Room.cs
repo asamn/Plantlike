@@ -7,7 +7,7 @@ public class Room : MonoBehaviour
 
     [SerializeField] int size = 1;
 
-    private float leeway = 2.5f; //provides some leeway when detecting overlapping rooms, higher means smaller bounding box, default is 2.5f
+    private float leeway = 2.25f; //provides some leeway when detecting overlapping rooms, higher means smaller bounding box, default is 2.25f
     bool m_Started;
     public LayerMask m_LayerMask;
     private Bounds roomBounds;
