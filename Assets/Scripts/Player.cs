@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float playerSpeed = .2f;
+    [SerializeField] float playerSpeed = 2f;
     [SerializeField] private float rotationSpeed = 5.0f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
+
+    public float maxHealth = 100f;
+    private float currentHealth;
+    public HealthBar healthBar;
+
+    public float maxXP = 100f;
+    private float currentXP;
+    public XPBar xpBar;
 
     private Rigidbody rb;
     private Vector3 movement;
@@ -19,6 +27,12 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; // Prevent rotation affecting movement
         rb.interpolation = RigidbodyInterpolation.Interpolate; // Smoothing the movement
+        
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+
+        currentXP = 0f;
+        xpBar.SetMaxXP(maxXP);
     }
 
     void Update()
@@ -105,10 +119,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ApplyMovement()
-    {
+    private void ApplyMovement(){
+        
         rb.velocity = movement;
+        //movement = movement.normalized * playerSpeed * Time.fixedDeltaTime;
+
+/*        if(Input.GetKeyDown(KeyCode.Space)){
+            GainXP(17);
+       } */
     }
+
+    //2 fixed updates after merge?
+    //void FixedUpdate()
+//{
+     //   rb.velocity = movement;
+    //}
+
 
     private void ApplyRotation()
     {
@@ -135,4 +161,36 @@ public class PlayerController : MonoBehaviour
             Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
         }
     }
+
+    void GainXP(float xpGained){
+        currentXP += xpGained;
+
+        if(currentXP >= maxXP){
+            currentXP -= maxXP;
+            Debug.Log("Level Up!");
+        }
+
+        xpBar.SetXP(currentXP);
+        Debug.Log("Gained " + xpGained + " XP");
+    }
+
+    public void TakeDamage(float amount){
+        Debug.Log(currentHealth + " " + amount);
+        currentHealth -= amount;
+
+        Debug.Log("Damage taken! Current health = " + currentHealth);
+
+        if(currentHealth <= 0){
+            currentHealth = 0;
+            Die();
+        }
+
+        healthBar.SetHealth(currentHealth);
+    }
+
+    void Die(){
+        Debug.Log("Player died");
+    }
+
 }
+
