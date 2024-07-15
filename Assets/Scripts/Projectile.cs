@@ -5,11 +5,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float projectileSpeed = 5.5f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    public int damage = 1;
+    private bool hitObject = false;
+
+    private GameObject enemy;
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -24,15 +25,14 @@ public class Projectile : MonoBehaviour
 
         if (collision.gameObject.tag != "Player" && collision.gameObject.tag != "Bullet") //don't destroy if collided with player or itself
         {
-            if (collision.gameObject.tag == "Enemy")
+            if (collision.gameObject.tag == "Enemy" && !hitObject) //maybe make tags for ranged and melee enemies
             {
-                Destroy(collision.gameObject);
+                enemy = collision.gameObject;
+                enemy.GetComponent<EnemyChase>().TakeDamage(damage);
+                hitObject = true;
+            
             }
-
             Destroy(this.gameObject);
-        }
-
-
-        
+        }        
     }
 }

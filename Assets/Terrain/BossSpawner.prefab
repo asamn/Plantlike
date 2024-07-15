@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1019939759872726342}
   - component: {fileID: 3169164155071236137}
   - component: {fileID: 2564727591591114742}
-  - component: {fileID: -4793471185041679810}
+  - component: {fileID: 915300716062720029}
   m_Layer: 0
-  m_Name: EnemySpawner 1
+  m_Name: BossSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-4793471185041679810
+--- !u!114 &915300716062720029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,9 +93,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8413580412088988246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9077c249e7821e741822e49b707aee4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 1dab735379d472849a9fc8cce007c297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPool:
-  - {fileID: 4996033368636374966, guid: 2d89cc63baf04b4458a282184cd9e3e0, type: 3}
-  spawnChance: 0.5
+  bossPool:
+  - {fileID: 4009962106355029046, guid: 0fb6b233769269d4280338830695fc6d, type: 3}

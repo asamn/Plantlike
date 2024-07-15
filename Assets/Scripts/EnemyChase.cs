@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class EnemyChase : MonoBehaviour
 {
-
-    [SerializeField] GameObject player;
-    [SerializeField] float speed;
+    private GameObject player;
+    private PlayerController playerController;
+    [SerializeField] private float speed;
     private float distance;
-    [SerializeField] Transform attackPoint;
-    [SerializeField] float attackRange = 1f;
-    [SerializeField] float attackCooldown = 2.0f;
-    [SerializeField] float attackDamage = 5f;
-    private float lastAttackTime = 0.0f;
+    private Vector3 attackPoint;
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private float attackCooldown = 2.0f;
+    private float attackCooldownTimer = 0.0f;
+    [SerializeField] private float attackDamage = 5f;
+
+    [SerializeField] private Animator animator;
+
+    public int HP = 5;
+   // private float lastAttackTime = 0.0f;
     public LayerMask playerLayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player"); //get the player game object
+        playerController = player.GetComponent<PlayerController>(); //get the player's controller script
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -30,41 +37,69 @@ public class EnemyChase : MonoBehaviour
         float angle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg;
         //Debug.Log(angle);
         transform.rotation = Quaternion.Euler(Vector3.down * angle);
-        
 
+        //set the attack point to a few inches in front of this enemy
+        attackPoint = transform.position + (transform.forward * 0.55f);
+
+        if (attackCooldownTimer > 0.0f)
+        {
+            //decrement the timer 
+            attackCooldownTimer -= Time.deltaTime;
+        }
+        //Debug.Log(this.gameObject.name + " --- Current time: " + attackCooldownTimer);
+        
+        //if not within range, move towards player until they are
         if(distance > attackRange * .9){
             transform.position = Vector3.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
         }
-
-        if(Time.time >= lastAttackTime + attackCooldown){
-            //Debug.Log(this.gameObject.name + " --- Current time: " + Time.time + " --- Last attack: " + lastAttackTime + " --- Cooldown: " + attackCooldown);
-            Attack();
+        else if(attackCooldownTimer <= 0){ //if ready to attack...  
+            Attack(); 
+            attackCooldownTimer = attackCooldown; //reset the timer
         }
 
     }
 
     void Attack(){
         //attack animation
+        print("ATTACKED: " + attackPoint);
 
+        
         //Detect player
-        Collider[] hitPlayer = Physics.OverlapSphere(attackPoint.position, attackRange, playerLayer);
+        
+        Collider[] hitPlayer = Physics.OverlapSphere(attackPoint, attackRange, playerLayer);
 
 
         //Attack player
         foreach(Collider playerObject in hitPlayer){
             Debug.Log("hit player");
-            playerObject.GetComponent<PlayerController>().TakeDamage(attackDamage);
-            lastAttackTime = Time.time;
+            playerController.TakeDamage(attackDamage);
+            break;
         }
         
     }
 
+    public void TakeDamage(int damage)
+    {
+        animator.SetTrigger("hit"); //trigger the hurt anim
+        this.HP -= damage;
+        if (this.HP <= 0)
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        playerController.GainXP(1);
+        //death animation?
+        Destroy(this.gameObject);
+    }
+
     void OnDrawGizmosSelected(){
         if(attackPoint == null){
-            return;
+            //return;
         }
 
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(attackPoint, attackRange); //this only draws one sphere
     }
 
 }

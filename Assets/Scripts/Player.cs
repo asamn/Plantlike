@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
 
+    //public float iFrameCooldown = 1f; //how many invincibility frames?
+    //private float iFrameCooldownTimer;
+
     public float maxHealth = 100f;
     private float currentHealth;
     public HealthBar healthBar;
@@ -162,7 +165,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void GainXP(float xpGained){
+    public void GainXP(float xpGained){
         currentXP += xpGained;
 
         if(currentXP >= maxXP){
@@ -189,7 +192,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void Die(){
-        Debug.Log("Player died");
+        Debug.Log("Player died! ");
+        Destroy(this.gameObject);
     }
 
 }

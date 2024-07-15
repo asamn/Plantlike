@@ -119,9 +119,10 @@ GameObject:
   - component: {fileID: 1155349106650364825}
   - component: {fileID: 4646596559314548183}
   - component: {fileID: 6943894233748897250}
+  - component: {fileID: -3515532940588152114}
   m_Layer: 0
   m_Name: GiantEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -253,15 +254,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 900da65dff150df44ae3ddb8107e3a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   speed: 0.5
-  attackPoint: {fileID: 471917917791090822}
   attackRange: 2.25
   attackCooldown: 2
   attackDamage: 5
+  animator: {fileID: 0}
+  HP: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!95 &-3515532940588152114
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4009962106355029046}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 74b5c3f697ea4904291651da44e6ab9d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5230849053759381768
 GameObject:
   m_ObjectHideFlags: 0

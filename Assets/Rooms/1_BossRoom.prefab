@@ -11222,6 +11222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -4793471185041679810, guid: 1753dc242d1d3314bb8b86df3d5f349f, type: 3}
+    - {fileID: 915300716062720029, guid: 1753dc242d1d3314bb8b86df3d5f349f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -11252,7 +11253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossPool:
-  - {fileID: 4996033368636374966, guid: 85ae37810bfe2614f80731896b4d7993, type: 3}
+  - {fileID: 4009962106355029046, guid: 0fb6b233769269d4280338830695fc6d, type: 3}
 --- !u!1001 &3902161271161998509
 PrefabInstance:
   m_ObjectHideFlags: 0
