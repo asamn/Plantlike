@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
+
+    [SerializeField] private TMP_Text levelText;
+
+    [SerializeField] private GameObject gm;
+
+    private int level = 1;
 
     //public float iFrameCooldown = 1f; //how many invincibility frames?
     //private float iFrameCooldownTimer;
@@ -169,8 +176,10 @@ public class PlayerController : MonoBehaviour
         currentXP += xpGained;
 
         if(currentXP >= maxXP){
-            currentXP -= maxXP;
+            currentXP = 0;
+            level++;
             Debug.Log("Level Up!");
+            levelText.text = ("LVL: " + level);
         }
 
         xpBar.SetXP(currentXP);
@@ -193,6 +202,7 @@ public class PlayerController : MonoBehaviour
 
     void Die(){
         Debug.Log("Player died! ");
+        gm.GetComponent<GameManager>().ShowDeathScreen();
         Destroy(this.gameObject);
     }
 

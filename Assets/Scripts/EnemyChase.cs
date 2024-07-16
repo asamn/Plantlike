@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class EnemyChase : MonoBehaviour
 {
-    private GameObject player;
+    private GameObject player, exclamation;
     private PlayerController playerController;
     [SerializeField] private float speed;
     private float distance;
     private Vector3 attackPoint;
     [SerializeField] private float attackRange = 1f;
+    [SerializeField] private float aggroRange = 20f;
     [SerializeField] private float attackCooldown = 2.0f;
     private float attackCooldownTimer = 0.0f;
     [SerializeField] private float attackDamage = 5f;
@@ -26,6 +27,8 @@ public class EnemyChase : MonoBehaviour
         player = GameObject.FindWithTag("Player"); //get the player game object
         playerController = player.GetComponent<PlayerController>(); //get the player's controller script
         animator = GetComponent<Animator>();
+        attackCooldownTimer = attackCooldown;
+        exclamation = transform.Find("Exclamation").gameObject;
     }
 
     // Update is called once per frame
@@ -41,29 +44,36 @@ public class EnemyChase : MonoBehaviour
         //set the attack point to a few inches in front of this enemy
         attackPoint = transform.position + (transform.forward * 0.55f);
 
-        if (attackCooldownTimer > 0.0f)
+        if (distance <= aggroRange) //if can see player
         {
-            //decrement the timer 
-            attackCooldownTimer -= Time.deltaTime;
+            exclamation.SetActive(true);
+            if (attackCooldownTimer > 0.0f)
+            {
+                //decrement the timer 
+                attackCooldownTimer -= Time.deltaTime;
+            }
+            //Debug.Log(this.gameObject.name + " --- Current time: " + attackCooldownTimer);
+            
+            //if not within range, move towards player until they are
+            if(distance > attackRange * .9){
+                transform.position = Vector3.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
+            }
+            else if(attackCooldownTimer <= 0){ //if ready to attack...  
+                Attack(); 
+                attackCooldownTimer = attackCooldown; //reset the timer
+            }
         }
-        //Debug.Log(this.gameObject.name + " --- Current time: " + attackCooldownTimer);
-        
-        //if not within range, move towards player until they are
-        if(distance > attackRange * .9){
-            transform.position = Vector3.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
-        }
-        else if(attackCooldownTimer <= 0){ //if ready to attack...  
-            Attack(); 
-            attackCooldownTimer = attackCooldown; //reset the timer
-        }
-
+        else
+        {
+            exclamation.SetActive(false);
+        } 
     }
 
     void Attack(){
         //attack animation
         print("ATTACKED: " + attackPoint);
+        animator.SetTrigger("attack");
 
-        
         //Detect player
         
         Collider[] hitPlayer = Physics.OverlapSphere(attackPoint, attackRange, playerLayer);
@@ -74,8 +84,7 @@ public class EnemyChase : MonoBehaviour
             Debug.Log("hit player");
             playerController.TakeDamage(attackDamage);
             break;
-        }
-        
+        }   
     }
 
     public void TakeDamage(int damage)
