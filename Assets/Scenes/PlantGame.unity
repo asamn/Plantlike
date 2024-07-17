@@ -871,7 +871,7 @@ Transform:
   m_GameObject: {fileID: 804000639}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.77, y: 0.75, z: -5.45}
+  m_LocalPosition: {x: 0.77, y: 1, z: -6.37}
   m_LocalScale: {x: 0.31, y: 0.31, z: 0.31}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -920,7 +920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968926acbc57bb04286929e5f69a82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 4
+  playerSpeed: 3
   rotationSpeed: 5
   bulletPrefab: {fileID: 1637860679798454961, guid: e97004f4bcba07347a6fa9c4460a68cd, type: 3}
   bulletSpawnPoint: {fileID: 965800303}
@@ -928,7 +928,10 @@ MonoBehaviour:
   levelText: {fileID: 1018534401}
   gm: {fileID: 651415405}
   maxHealth: 100
+  currentHealth: 0
   healthBar: {fileID: 1982079621}
+  damage: 1
+  bulletSpeed: 2
   maxXP: 9
   xpBar: {fileID: 1982079620}
 --- !u!135 &804000647

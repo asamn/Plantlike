@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float projectileSpeed = 5.5f;
+    public float projectileSpeed = 5.5f; //this will be set by the player.cs 
+    [SerializeField] private float timeout = 30.0f;
 
-    public int damage = 1;
+    private int damage = 1; //this will be set by the player.cs
     private bool hitObject = false;
 
     private GameObject enemy;
@@ -17,12 +18,15 @@ public class Projectile : MonoBehaviour
     {
         transform.Translate(Vector3.forward * projectileSpeed * Time.deltaTime);
 
-        //maybe add a timer to de-spawn bullets that somehow clip out the map and travel endlessly  
+        timeout -= Time.deltaTime;
+        if (timeout <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-
         if (collision.gameObject.tag != "Player" && collision.gameObject.tag != "Bullet") //don't destroy if collided with player or itself
         {
             if (collision.gameObject.tag == "Enemy" && !hitObject) //maybe make tags for ranged and melee enemies
@@ -34,5 +38,13 @@ public class Projectile : MonoBehaviour
             }
             Destroy(this.gameObject);
         }        
+    }
+    public void setDamage (int dmg)
+    {
+        damage = dmg;
+    }
+    public void setSpeed (float speed)
+    {
+        projectileSpeed = speed;
     }
 }

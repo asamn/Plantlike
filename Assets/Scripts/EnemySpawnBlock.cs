@@ -6,7 +6,7 @@ public class EnemySpawnBlock : MonoBehaviour
 {
     [SerializeField] private GameObject[] enemyPool;
 
-    public float spawnChance = 0.5f;
+    public float spawnChance = 0.7f;
     private float spawnRng = 0;
 
     private int rng = 0;
