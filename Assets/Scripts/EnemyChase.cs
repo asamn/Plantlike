@@ -7,6 +7,9 @@ public class EnemyChase : MonoBehaviour
     private GameObject player, exclamation;
     private PlayerController playerController;
     [SerializeField] private float speed;
+    [SerializeField, Range(0f,1f)] private float lootChance;
+    [SerializeField] private GameObject[] lootTablePool;
+    [SerializeField] private GameObject deathEffect; //particle system
     private float distance;
     private Vector3 attackPoint;
     [SerializeField] private float attackRange = 1f;
@@ -99,7 +102,19 @@ public class EnemyChase : MonoBehaviour
     void Die()
     {
         playerController.GainXP(1);
-        //death animation?
+        Instantiate(deathEffect, (this.gameObject.transform.position + Vector3.up * 0.75f), this.gameObject.transform.rotation);
+
+        float spawnRng = Random.Range(0.0f, 1.0f);
+        if (spawnRng <= lootChance)
+        {
+            int rng = Random.Range(0,lootTablePool.Length);
+            Instantiate(lootTablePool[rng], (new Vector3(gameObject.transform.position.x, player.transform.position.y, gameObject.transform.position.z)), Quaternion.identity);
+
+        }
+        
+        
+
+
         Destroy(this.gameObject);
     }
 

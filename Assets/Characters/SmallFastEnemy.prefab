@@ -214,6 +214,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
+  lootChance: 0.1
+  lootTablePool:
+  - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
+  - {fileID: 969528951342961759, guid: c91363205b7508443a7fa6f846e31434, type: 3}
+  - {fileID: 969528951342961759, guid: eddce614d9b3474409c889ca004e717c, type: 3}
+  - {fileID: 969528951342961759, guid: e6b202039fc015c45bc72bce2fee832e, type: 3}
+  - {fileID: 969528951342961759, guid: 9dd64133ea182b542afbdf9a51757e77, type: 3}
+  deathEffect: {fileID: 3540182083061574896, guid: c647346febd09f640a2b959488099213, type: 3}
   attackRange: 1.6
   aggroRange: 10
   attackCooldown: 2

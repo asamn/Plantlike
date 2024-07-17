@@ -21,8 +21,11 @@ public class PlayerController : MonoBehaviour
     //private float iFrameCooldownTimer;
 
     public float maxHealth = 100f;
-    private float currentHealth;
+    [SerializeField]private float currentHealth;
     public HealthBar healthBar;
+
+    public int damage = 1;
+    public float bulletSpeed = 5.0f;
 
     public float maxXP = 100f;
     private float currentXP;
@@ -56,6 +59,90 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
     }
 
+    private void FireProjectile()
+    {
+        if (bulletPrefab && bulletSpawnPoint)
+        {
+            Projectile bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Projectile>();
+            bullet.setDamage(damage); //set to the player's damage
+            bullet.setSpeed(bulletSpeed); 
+            
+        }
+        /*
+        else if (bulletPrefab)
+        {
+            Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
+        }
+        */
+        else
+        {
+            print("ERROR SPAWNING BULLET! ");
+        }
+    }
+
+    public void GainXP(float xpGained){
+        currentXP += xpGained;
+
+        if(currentXP >= maxXP){
+            currentXP = 0;
+            level++;
+            Debug.Log("Level Up!");
+            levelText.text = ("LVL: " + level);
+        }
+
+        xpBar.SetXP(currentXP);
+        Debug.Log("Gained " + xpGained + " XP");
+    }
+
+    public void TakeDamage(float amount){
+        Debug.Log(currentHealth + " " + amount);
+        currentHealth -= amount;
+
+        Debug.Log("Damage taken! Current health = " + currentHealth);
+
+        if(currentHealth <= 0){
+            currentHealth = 0;
+            Die();
+        }
+
+        healthBar.SetHealth(currentHealth);
+    }
+    void Die(){
+        Debug.Log("Player died! ");
+        gm.GetComponent<GameManager>().ShowDeathScreen();
+        Destroy(this.gameObject);
+    }
+
+    public void increaseSpeed(float amount)
+    {
+        playerSpeed += amount;
+    }
+    public void increaseBulletSpeed (float amount)
+    {
+        bulletSpeed += amount;
+    }
+    public void increaseMaxHealth(float amount)
+    {
+        maxHealth += amount;
+        healthBar.SetMaxHealth(maxHealth);
+        healHealth(amount * 0.25f);
+
+    }
+    public void healHealth (float amount)
+    {
+        currentHealth += amount;
+        if (currentHealth > maxHealth) //overheal
+        {
+            currentHealth = maxHealth;
+        }
+        healthBar.SetHealth(currentHealth);
+    }
+    public void increaseDamage(int amount)
+    {
+        damage += amount;
+    }
+    //======================INPUT HANDLING====================================
+    //========================================================================
     private void HandleInput()
     {
         if (useGamepad)
@@ -76,7 +163,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
     private void HandleGamepadInput()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -132,19 +218,7 @@ public class PlayerController : MonoBehaviour
     private void ApplyMovement(){
         
         rb.velocity = movement;
-        //movement = movement.normalized * playerSpeed * Time.fixedDeltaTime;
-
-/*        if(Input.GetKeyDown(KeyCode.Space)){
-            GainXP(17);
-       } */
     }
-
-    //2 fixed updates after merge?
-    //void FixedUpdate()
-//{
-     //   rb.velocity = movement;
-    //}
-
 
     private void ApplyRotation()
     {
@@ -159,52 +233,5 @@ public class PlayerController : MonoBehaviour
             rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
     }
-
-    private void FireProjectile()
-    {
-        if (bulletPrefab && bulletSpawnPoint)
-        {
-            Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
-        }
-        else if (bulletPrefab)
-        {
-            Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
-        }
-    }
-
-    public void GainXP(float xpGained){
-        currentXP += xpGained;
-
-        if(currentXP >= maxXP){
-            currentXP = 0;
-            level++;
-            Debug.Log("Level Up!");
-            levelText.text = ("LVL: " + level);
-        }
-
-        xpBar.SetXP(currentXP);
-        Debug.Log("Gained " + xpGained + " XP");
-    }
-
-    public void TakeDamage(float amount){
-        Debug.Log(currentHealth + " " + amount);
-        currentHealth -= amount;
-
-        Debug.Log("Damage taken! Current health = " + currentHealth);
-
-        if(currentHealth <= 0){
-            currentHealth = 0;
-            Die();
-        }
-
-        healthBar.SetHealth(currentHealth);
-    }
-
-    void Die(){
-        Debug.Log("Player died! ");
-        gm.GetComponent<GameManager>().ShowDeathScreen();
-        Destroy(this.gameObject);
-    }
-
 }
 
