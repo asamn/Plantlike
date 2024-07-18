@@ -9,16 +9,20 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        // Calculate the desired position for the camera
-        Vector3 desiredPosition = player.position + offset;
+        if (player != null)
+        {
+            // Calculate the desired position for the camera
+            Vector3 desiredPosition = player.position + offset;
 
-        // Smoothly interpolate the camera's position towards the desired position
-        Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothTime);
+            // Smoothly interpolate the camera's position towards the desired position
+            Vector3 smoothedPosition = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothTime);
 
-        // Update the camera's position
-        transform.position = smoothedPosition;
+            // Update the camera's position
+            transform.position = smoothedPosition;
 
-        // Make the camera always look at the player
-        transform.LookAt(player);
+            // Make the camera always look at the player
+            transform.LookAt(player);
     }
+        }
+        
 }

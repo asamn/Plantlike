@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public HealthBar healthBar;
 
     public int damage = 1;
+    private int dungeonLvl = 1;
     public float bulletSpeed = 5.0f;
 
     public float maxXP = 100f;
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
         currentXP = 0f;
         xpBar.SetMaxXP(maxXP);
+        dungeonLvl = 1;
     }
 
     void Update()
@@ -140,6 +142,19 @@ public class PlayerController : MonoBehaviour
     public void increaseDamage(int amount)
     {
         damage += amount;
+    }
+
+    public void increaseDungeonLevel()
+    {
+        dungeonLvl++;
+    }
+    public int getDungeonLevel()
+    {
+        return dungeonLvl;  
+    }
+    public void resetPosition()
+    {
+        transform.position = new Vector3(-1f, 0.75f,-6f);
     }
     //======================INPUT HANDLING====================================
     //========================================================================

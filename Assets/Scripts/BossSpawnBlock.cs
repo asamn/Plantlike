@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(60)] 
 public class BossSpawnBlock : MonoBehaviour
 {
     [SerializeField] private GameObject[] bossPool;
@@ -13,7 +14,8 @@ public class BossSpawnBlock : MonoBehaviour
     void Update()
     {
         rng = Random.Range(0,bossPool.Length);
-        Instantiate(bossPool[rng], this.gameObject.transform.position, this.gameObject.transform.rotation);
+        GameObject boss = Instantiate(bossPool[rng], this.gameObject.transform.position, this.gameObject.transform.rotation);
+        boss.name = "BossEnemy";
         Destroy(this.gameObject);
     }
 }

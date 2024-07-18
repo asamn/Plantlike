@@ -6,25 +6,38 @@ public enum Direction
 {
     East,West,North,South
 }
-
+[DefaultExecutionOrder(1)] //make sure this runs first
 public class LevelGen : MonoBehaviour
 {
-
-    [SerializeField] private GameObject startingRoom;
+    [SerializeField] private GameObject startingRoomPrefab;
 
     [SerializeField] private GameObject[] roomPool;
     [SerializeField] private GameObject bossRoom;
     [SerializeField] private int roomCount;
+    private int currentRoomCount;
     //separate pools for east to west, north to south
     [SerializeField] private GameObject[] NSConnectorPool, EWConnectorPool;
 
     private List<GameObject> markerList; 
+
+    private bool levelGenerated = false;
     
 
-    // Awake 
-    void Start()
+    void Awake()
     {
+        GenerateLevel();
+    }
+
+    public void GenerateLevel()
+    {
+        levelGenerated = false;
+        currentRoomCount = roomCount;
         markerList = new List<GameObject>();
+
+        //place the starting room
+        GameObject startingRoom = Instantiate(startingRoomPrefab, new Vector3(0,0,0), Quaternion.identity);
+        startingRoom.transform.parent = gameObject.transform;
+
         //the markers of each room should be stored in layer 2 
         GameObject layer2 = startingRoom.transform.Find("Layer2").gameObject; 
 
@@ -61,21 +74,28 @@ public class LevelGen : MonoBehaviour
             markerList.RemoveAt(rng);
 
             Marker m = currentMarker.GetComponent<Marker>();
+            
+
+            if (currentRoomCount <= 0)
+            {
+                if (!m.isVisited())
+                {
+                    //do nothing, just fill the marker's wall
+                    m.fillWall();
+                    
+                }
+                continue;
+                
+            }
             m.setVisited();
 
-            if (roomCount <= 0)
-            {
-                //do nothing, just fill the marker's wall
-                m.fillWall();
-                continue;
-            }
-
             //connectors do not count towards roomCount
-            roomCount--;
+            currentRoomCount--;
 
             GameObject currentConnector = null;
             GameObject currentRoom = null;
             GameObject connectorMarker = null;
+
 
             //random connector, make sure there is an equal amount of NS and EW connectors
             rng = Random.Range(0,NSConnectorPool.Length);
@@ -133,6 +153,7 @@ public class LevelGen : MonoBehaviour
             if(currentConnector != null)
             {
                 currentConnector.transform.position = spawnPosition;
+                currentConnector.transform.parent = gameObject.transform;
             }
             else
             {
@@ -149,13 +170,13 @@ public class LevelGen : MonoBehaviour
             {
                 print("OVERLAP! CONNECTOR");
                 m.fillWall();
-                roomCount++; //retry the room
+                currentRoomCount++; //retry the room
                 Destroy(currentConnector);
                 continue; //do not run below code, 
             }
 
             //start spawning the room
-            if (roomCount == 0) //spawn the boss room last
+            if (currentRoomCount == 0) //spawn the boss room last
             {
                 print("Spawning boss room... ");
                 currentRoom = Instantiate(bossRoom, connectorMarker.transform.position, connectorMarker.transform.rotation);
@@ -218,6 +239,7 @@ public class LevelGen : MonoBehaviour
             if (currentRoom != null)
             {
                 currentRoom.transform.position = spawnPosition;
+                currentRoom.transform.parent = gameObject.transform;
             }
             else
             {
@@ -232,7 +254,7 @@ public class LevelGen : MonoBehaviour
             {
                 print("OVERLAP!");
                 m.fillWall();
-                roomCount++; //retry the room
+                currentRoomCount++; //retry the room
                 Destroy(currentRoom);
                 Destroy(currentConnector); //destroy this as well
                 continue; //do not run below code, 
@@ -257,5 +279,32 @@ public class LevelGen : MonoBehaviour
                 markerList.Add(currentRoom.GetComponent<Room>().GetWestMarker());   
             }
         }
+        
+        levelGenerated = true;
+    }
+    public bool isGenerated()
+    {
+        return levelGenerated;
+    }
+
+    public void clearLevel()
+    {
+        GameObject[] roomsToClear = new GameObject[transform.childCount]; //save the starting room
+
+        int i = 0;        
+        foreach (Transform c in transform)
+        {
+            roomsToClear[i] = c.gameObject;
+            i++;
+        }
+
+        foreach (GameObject o in roomsToClear)
+        {
+
+            Destroy(o.gameObject);
+    
+        }
+        currentRoomCount = roomCount;
+        markerList.Clear();
     }
 }

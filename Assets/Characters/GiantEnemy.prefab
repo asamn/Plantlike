@@ -57,7 +57,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 0.48852894}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4646596559314548183
 Rigidbody:
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  lootChance: 0.3
+  lootChance: 0.69
   lootTablePool:
   - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
   - {fileID: 969528951342961759, guid: c91363205b7508443a7fa6f846e31434, type: 3}
@@ -110,6 +110,7 @@ MonoBehaviour:
   attackRange: 2.25
   aggroRange: 15
   attackCooldown: 2
+  XPReward: 2
   attackDamage: 20
   animator: {fileID: 0}
   HP: 20
