@@ -164,7 +164,7 @@ MonoBehaviour:
   XPReward: 15
   attackDamage: 25
   animator: {fileID: 0}
-  HP: 5
+  HP: 60
   playerLayer:
     serializedVersion: 2
     m_Bits: 64

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(60)] 
+//[DefaultExecutionOrder(60)] 
 public class BossSpawnBlock : MonoBehaviour
 {
     [SerializeField] private GameObject[] bossPool;
