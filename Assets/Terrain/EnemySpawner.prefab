@@ -100,4 +100,5 @@ MonoBehaviour:
   - {fileID: 7727116643029580886, guid: c30e5c5986765174a9e85681066dde15, type: 3}
   - {fileID: 6040881977731827159, guid: f5bc826c7a9f1c54e93049144e9c88b3, type: 3}
   - {fileID: 4009962106355029046, guid: 91e7a1e692bae1c42922487aec5b21a8, type: 3}
+  - {fileID: 7727116643029580886, guid: 247ac0638fd8ae7418b9a6f955d35c75, type: 3}
   spawnChance: 0.7

@@ -46,7 +46,7 @@ public class EnemyChase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (player != null)
         {
@@ -86,7 +86,7 @@ public class EnemyChase : MonoBehaviour
         }
     }
 
-    protected void Attack(){
+    protected virtual void Attack(){
         //attack animation
         print("ATTACKED: " + attackPoint);
         animator.SetTrigger("attack");

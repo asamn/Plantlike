@@ -5,10 +5,10 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float projectileSpeed = 5.5f; //this will be set by the player.cs 
-    [SerializeField] private float timeout = 30.0f;
+    [SerializeField] protected float timeout = 30.0f;
 
-    private int damage = 1; //this will be set by the player.cs
-    private bool hitObject = false;
+    protected int damage = 1; //this will be set by the player.cs
+    protected bool hitObject = false;
 
     private GameObject enemy;
 
@@ -25,7 +25,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag != "Player" && collision.gameObject.tag != "Bullet") //don't destroy if collided with player or itself
         {
