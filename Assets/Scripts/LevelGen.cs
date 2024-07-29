@@ -6,14 +6,14 @@ public enum Direction
 {
     East,West,North,South
 }
-[DefaultExecutionOrder(1)] //make sure this runs first
+//[DefaultExecutionOrder(1)] //make sure this runs first
 public class LevelGen : MonoBehaviour
 {
     [SerializeField] private GameObject startingRoomPrefab;
 
     [SerializeField] private GameObject[] roomPool;
     [SerializeField] private GameObject bossRoom;
-    [SerializeField] private int roomCount;
+    private int roomCount;
     private int currentRoomCount;
     //separate pools for east to west, north to south
     [SerializeField] private GameObject[] NSConnectorPool, EWConnectorPool;
@@ -25,6 +25,17 @@ public class LevelGen : MonoBehaviour
 
     void Awake()
     {
+        GameObject userOptions = GameObject.Find("SavedUserOptions");
+
+        if (userOptions != null)
+        {
+            roomCount = userOptions.GetComponent<SavedUserOptions>().getWorldSize();
+        }
+        else
+        {
+            roomCount = 3;
+        }
+        levelGenerated = false;
         GenerateLevel();
     }
 
@@ -36,6 +47,7 @@ public class LevelGen : MonoBehaviour
 
         //place the starting room
         GameObject startingRoom = Instantiate(startingRoomPrefab, new Vector3(0,0,0), Quaternion.identity);
+        
         startingRoom.transform.parent = gameObject.transform;
 
         //the markers of each room should be stored in layer 2 
@@ -168,17 +180,15 @@ public class LevelGen : MonoBehaviour
             //Check overlap of the spawned connector
             if (currentConnector.GetComponent<Room>().isOverlapping())
             {
-                print("OVERLAP! CONNECTOR");
-                m.fillWall();
-                currentRoomCount++; //retry the room
-                Destroy(currentConnector);
+                //print("OVERLAP! CONNECTOR");
+                DestroyPiece(currentConnector, m);
                 continue; //do not run below code, 
             }
 
             //start spawning the room
             if (currentRoomCount == 0) //spawn the boss room last
             {
-                print("Spawning boss room... ");
+                //print("Spawning boss room... ");
                 currentRoom = Instantiate(bossRoom, connectorMarker.transform.position, connectorMarker.transform.rotation);
             }
             else
@@ -194,8 +204,9 @@ public class LevelGen : MonoBehaviour
             case "North":
                 if (currentRoom.GetComponent<Room>().GetSouthMarker() == null) //if the room trying to spawn doesn't have a south connection point, don't bother spawning it, it will count as an overlap
                 {
-                    spawnPosition = startingRoom.transform.position; //force overlap
-                    break;
+                    DestroyPiece(currentRoom, m);
+                    DestroyPiece(currentConnector, m);
+                    continue; //dont run below codes
                 }
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetSouthMarker().transform.position.z - 1; //adjust 
                 //make sure the rooms align
@@ -204,8 +215,9 @@ public class LevelGen : MonoBehaviour
             case "East":
                 if (currentRoom.GetComponent<Room>().GetWestMarker() == null)
                 {
-                    spawnPosition = startingRoom.transform.position; //force overlap
-                    break;
+                    DestroyPiece(currentRoom, m);
+                    DestroyPiece(currentConnector, m);
+                    continue;
                 }
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetWestMarker().transform.position.x - 1; //adjust 
                 //make sure the rooms align
@@ -214,8 +226,9 @@ public class LevelGen : MonoBehaviour
             case "South":
                 if (currentRoom.GetComponent<Room>().GetNorthMarker() == null)
                 {
-                    spawnPosition = startingRoom.transform.position; //force overlap
-                    break;
+                    DestroyPiece(currentRoom, m);
+                    DestroyPiece(currentConnector, m);
+                    continue;
                 }
                 spawnPosition.z += connectorMarker.transform.position.z - currentRoom.GetComponent<Room>().GetNorthMarker().transform.position.z + 1; //adjust 
                 //make sure the rooms align
@@ -224,8 +237,9 @@ public class LevelGen : MonoBehaviour
             case "West":
                 if (currentRoom.GetComponent<Room>().GetEastMarker() == null)
                 {
-                    spawnPosition = startingRoom.transform.position; //force overlap
-                    break;
+                    DestroyPiece(currentRoom, m);
+                    DestroyPiece(currentConnector, m);
+                    continue;
                 }
                 spawnPosition.x += connectorMarker.transform.position.x - currentRoom.GetComponent<Room>().GetEastMarker().transform.position.x + 1; //adjust 
                 //make sure the rooms align
@@ -252,11 +266,9 @@ public class LevelGen : MonoBehaviour
             //Check overlap of the spawned room, also destroy the connector 
             if (currentRoom.GetComponent<Room>().isOverlapping())
             {
-                print("OVERLAP!");
-                m.fillWall();
-                currentRoomCount++; //retry the room
-                Destroy(currentRoom);
-                Destroy(currentConnector); //destroy this as well
+                //print("OVERLAP!");
+                DestroyPiece(currentRoom, m);
+                DestroyPiece(currentConnector, m);
                 continue; //do not run below code, 
             }
 
@@ -281,7 +293,17 @@ public class LevelGen : MonoBehaviour
         }
         
         levelGenerated = true;
+        print("Generated level of size: " + roomCount);
     }
+
+    //o is the room piece, m is the current marker it is trying to spawn at
+    void DestroyPiece(GameObject o, Marker m)
+    {
+        m.fillWall();
+        currentRoomCount++; //retry the room
+        Destroy(o);
+    }
+
     public bool isGenerated()
     {
         return levelGenerated;

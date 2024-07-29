@@ -368,6 +368,70 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &419326283
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 419326285}
+  - component: {fileID: 419326284}
+  m_Layer: 0
+  m_Name: GeneratedLevel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &419326284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419326283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af00a399ca8c88d448845027a9aaebaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingRoomPrefab: {fileID: 8225368197046840206, guid: fcbb5204dc5fbfa42b7b798abced9702, type: 3}
+  roomPool:
+  - {fileID: 5457233950112831187, guid: f4c4b0eca315bf74298bba39e3cfe9cf, type: 3}
+  - {fileID: 5457233950112831187, guid: 0cf3e7ae6d0d2e447827eccb78752e59, type: 3}
+  - {fileID: 5457233950112831187, guid: 48d043c5c85db2e468d8654657cabb4e, type: 3}
+  - {fileID: 5457233950112831187, guid: 321ce924c7ec13f44b4816c1545d163d, type: 3}
+  - {fileID: 5457233950112831187, guid: 2ee4d837c60f02f4a81f6600f0d7668e, type: 3}
+  - {fileID: 5457233950112831187, guid: 09f37abec6989f7479d8fe19bfb09ac5, type: 3}
+  - {fileID: 5457233950112831187, guid: cd2d4bf3091fda8498b2815160957886, type: 3}
+  - {fileID: 5457233950112831187, guid: 26a57d6cf551fd94fbefe38c4a77a6f8, type: 3}
+  - {fileID: 5457233950112831187, guid: 1c56b31f28a03a54daacdbdd8500200d, type: 3}
+  - {fileID: 5457233950112831187, guid: 7b8c17c236ab4e54e910fe5f45e9a769, type: 3}
+  - {fileID: 5457233950112831187, guid: 8caf97ff943bb814392e9bd2b1cfdb25, type: 3}
+  bossRoom: {fileID: 5457233950112831187, guid: 8e82121489048d144b84c2a25b580081, type: 3}
+  NSConnectorPool:
+  - {fileID: 5457233950112831187, guid: 26f03bb291fda4a4395d5f8cced7be6e, type: 3}
+  - {fileID: 5457233950112831187, guid: 0a037652c0fa2714697b00f8ef450a70, type: 3}
+  EWConnectorPool:
+  - {fileID: 5457233950112831187, guid: e9dcd2bbf3541ea4b8396b3862bdea0a, type: 3}
+  - {fileID: 5457233950112831187, guid: 40f06af64dfbf6543b96b39ea21cb5be, type: 3}
+--- !u!4 &419326285
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419326283}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &441270829
 GameObject:
   m_ObjectHideFlags: 0
@@ -1895,70 +1959,6 @@ MonoBehaviour:
   player: {fileID: 804000643}
   offset: {x: 0, y: 4, z: -4}
   smoothTime: 0.24
---- !u!1 &1783850684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1783850686}
-  - component: {fileID: 1783850685}
-  m_Layer: 0
-  m_Name: GeneratedLevel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1783850685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1783850684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af00a399ca8c88d448845027a9aaebaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingRoomPrefab: {fileID: 8225368197046840206, guid: fcbb5204dc5fbfa42b7b798abced9702, type: 3}
-  roomPool:
-  - {fileID: 5457233950112831187, guid: f4c4b0eca315bf74298bba39e3cfe9cf, type: 3}
-  - {fileID: 5457233950112831187, guid: 0cf3e7ae6d0d2e447827eccb78752e59, type: 3}
-  - {fileID: 5457233950112831187, guid: 48d043c5c85db2e468d8654657cabb4e, type: 3}
-  - {fileID: 5457233950112831187, guid: 321ce924c7ec13f44b4816c1545d163d, type: 3}
-  - {fileID: 5457233950112831187, guid: 2ee4d837c60f02f4a81f6600f0d7668e, type: 3}
-  - {fileID: 5457233950112831187, guid: cd2d4bf3091fda8498b2815160957886, type: 3}
-  - {fileID: 5457233950112831187, guid: 26a57d6cf551fd94fbefe38c4a77a6f8, type: 3}
-  - {fileID: 5457233950112831187, guid: 1c56b31f28a03a54daacdbdd8500200d, type: 3}
-  - {fileID: 5457233950112831187, guid: 7b8c17c236ab4e54e910fe5f45e9a769, type: 3}
-  - {fileID: 5457233950112831187, guid: 8caf97ff943bb814392e9bd2b1cfdb25, type: 3}
-  bossRoom: {fileID: 5457233950112831187, guid: 8e82121489048d144b84c2a25b580081, type: 3}
-  roomCount: 3
-  NSConnectorPool:
-  - {fileID: 5457233950112831187, guid: 26f03bb291fda4a4395d5f8cced7be6e, type: 3}
-  - {fileID: 5457233950112831187, guid: 0a037652c0fa2714697b00f8ef450a70, type: 3}
-  EWConnectorPool:
-  - {fileID: 5457233950112831187, guid: e9dcd2bbf3541ea4b8396b3862bdea0a, type: 3}
-  - {fileID: 5457233950112831187, guid: 40f06af64dfbf6543b96b39ea21cb5be, type: 3}
---- !u!4 &1783850686
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1783850684}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1862878265
 GameObject:
   m_ObjectHideFlags: 0
@@ -2357,7 +2357,7 @@ SceneRoots:
   - {fileID: 804000643}
   - {fileID: 999791517}
   - {fileID: 441270830}
-  - {fileID: 1783850686}
+  - {fileID: 419326285}
   - {fileID: 23101297}
   - {fileID: 307105948}
   - {fileID: 1862878267}
