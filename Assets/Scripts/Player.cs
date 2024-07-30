@@ -6,6 +6,7 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float playerSpeed = 2f;
+    private float speedCap = 15f;
     [SerializeField] private float rotationSpeed = 5.0f;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TMP_Text levelText;
 
     [SerializeField] private GameObject gm;
+
+    private AudioManager am;
 
     private int level = 1;
 
@@ -28,14 +31,19 @@ public class PlayerController : MonoBehaviour
     private int dungeonLvl = 1;
     public float bulletSpeed = 5.0f;
 
+    
+
     public float maxXP = 100f;
     private float currentXP;
     public XPBar xpBar;
-
     private Rigidbody rb;
     private Vector3 movement;
     private Vector3 aimDirection;
 
+    void Awake()
+    {
+        am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -68,7 +76,7 @@ public class PlayerController : MonoBehaviour
             Projectile bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Projectile>();
             bullet.setDamage(damage); //set to the player's damage
             bullet.setSpeed(bulletSpeed); 
-            
+            am.PlayProjectile();
         }
         /*
         else if (bulletPrefab)
@@ -90,6 +98,8 @@ public class PlayerController : MonoBehaviour
             level++;
             Debug.Log("Level Up!");
             levelText.text = ("LVL: " + level);
+            healHealth(level * 10);
+            am.PlayLevelUp();
         }
 
         xpBar.SetXP(currentXP);
@@ -98,6 +108,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float amount){
         Debug.Log(currentHealth + " " + amount);
+
+        am.PlayHurt();
+
         currentHealth -= amount;
 
         Debug.Log("Damage taken! Current health = " + currentHealth);
@@ -117,7 +130,15 @@ public class PlayerController : MonoBehaviour
 
     public void increaseSpeed(float amount)
     {
-        playerSpeed += amount;
+        if (playerSpeed > speedCap) //prevent the player from obtaining a speeding ticket, heal instead
+        {
+            healHealth(10 * level);
+        }
+        else
+        {
+            playerSpeed += amount;
+        }
+        
     }
     public void increaseBulletSpeed (float amount)
     {

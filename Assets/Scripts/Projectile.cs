@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float projectileSpeed = 5.5f; //this will be set by the player.cs 
-    [SerializeField] protected float timeout = 30.0f;
+    [SerializeField] protected float timeout = 4.0f;
 
     protected int damage = 1; //this will be set by the player.cs
     protected bool hitObject = false;

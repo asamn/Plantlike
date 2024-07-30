@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileSpeed: 5.5
+  timeout: 4
 --- !u!54 &-5009775322077312138
 Rigidbody:
   m_ObjectHideFlags: 0

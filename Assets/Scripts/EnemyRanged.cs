@@ -45,8 +45,9 @@ public class EnemyRanged : EnemyChase
     }
 
     protected override void Attack(){
+        attackSound.Play();
         //attack animation
-        print("ATTACKED: " + attackPoint);
+        //print("ATTACKED: " + attackPoint);
         animator.SetTrigger("attack");
 
         EnemyProjectile spawnedBullet = Instantiate(bullet, attackPoint, transform.rotation).GetComponent<EnemyProjectile>();

@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968926acbc57bb04286929e5f69a82fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 3
+  playerSpeed: 3.5
   rotationSpeed: 5
   bulletPrefab: {fileID: 1637860679798454961, guid: e97004f4bcba07347a6fa9c4460a68cd, type: 3}
   bulletSpawnPoint: {fileID: 965800303}

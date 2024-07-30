@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class TitleScreen : MonoBehaviour
 {
@@ -10,9 +11,20 @@ public class TitleScreen : MonoBehaviour
     private int selectedWorldSize = 3;
     [SerializeField] private GameObject startButton, quitButton;
     [SerializeField] private GameObject worldOptions, savedUserOptions;
+
+    [SerializeField] private TMP_Text startButtonText;
+    private AudioManager am;
+
+    void Awake()
+    {
+        am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
+
     public void StartGame()
     {
-        print("START");
+        //print("START");
+        am.StartAmbience();
+        startButtonText.text = "Generating...";
         SceneManager.LoadScene("PlantGame");
 
     }    

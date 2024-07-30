@@ -21,6 +21,8 @@ public class EnemyChase : MonoBehaviour
 
     [SerializeField] protected Animator animator;
 
+    [SerializeField] protected AudioSource hurtSound,attackSound;
+
     public int HP = 5;
    // private float lastAttackTime = 0.0f;
     public LayerMask playerLayer;
@@ -87,6 +89,7 @@ public class EnemyChase : MonoBehaviour
     }
 
     protected virtual void Attack(){
+        attackSound.Play();
         //attack animation
         print("ATTACKED: " + attackPoint);
         animator.SetTrigger("attack");
@@ -106,6 +109,7 @@ public class EnemyChase : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        hurtSound.Play();
         animator.SetTrigger("hit"); //trigger the hurt anim
         this.HP -= damage;
         if (this.HP <= 0)
