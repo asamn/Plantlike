@@ -17,7 +17,11 @@ public class GameManager : MonoBehaviour
     private GameObject boss;
     public TMP_Text deathText;
     private bool foundBoss;
-
+    private AudioManager am;
+    void Awake()
+    {
+        am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+    }
     void Start()
     {
         player = GameObject.FindWithTag("Player"); //get the player game object
@@ -61,12 +65,15 @@ public class GameManager : MonoBehaviour
     
     public void Respawn()
     {
+        am.StartMusic();
+        am.StartAmbience();
         //just reload the scene
         SceneManager.LoadScene("PlantGame");
     }
 
     public void BackToMenu()
     {
+        am.StartMusic();
         SceneManager.LoadScene("Title");
     }
 

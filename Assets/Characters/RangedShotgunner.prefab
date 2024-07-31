@@ -43,11 +43,11 @@ GameObject:
   - component: {fileID: 4167535009987798547}
   - component: {fileID: 52706928013856834}
   - component: {fileID: 7775901946619333412}
-  - component: {fileID: 3392312708524484147}
-  - component: {fileID: -4655112179156080170}
-  - component: {fileID: -2650997136731378005}
+  - component: {fileID: 2550712042315224377}
+  - component: {fileID: 4328806835467847668}
+  - component: {fileID: -7126130251058106287}
   m_Layer: 0
-  m_Name: RangedEnemy
+  m_Name: RangedShotgunner
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.251009, y: -1.98, z: 3.5563884}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 0.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3272316880748000161}
@@ -140,7 +140,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3392312708524484147
+--- !u!114 &2550712042315224377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,13 +149,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7727116643029580886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e780fc2374fd5345a21baa7dfce498a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37c288a3eefa77944b89298af9c38ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  lootChance: 0.3
+  lootChance: 0.45
   lootTablePool:
-  - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
   - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
   - {fileID: 969528951342961759, guid: c91363205b7508443a7fa6f846e31434, type: 3}
   - {fileID: 969528951342961759, guid: eddce614d9b3474409c889ca004e717c, type: 3}
@@ -164,18 +163,19 @@ MonoBehaviour:
   deathEffect: {fileID: 3540182083061574896, guid: c647346febd09f640a2b959488099213, type: 3}
   attackRange: 1
   aggroRange: 15
-  attackCooldown: 1.75
-  XPReward: 1
-  attackDamage: 16
-  hurtSound: {fileID: -4655112179156080170}
-  attackSound: {fileID: -2650997136731378005}
-  HP: 7
+  attackCooldown: 1.2
+  XPReward: 2
+  attackDamage: 9
+  hurtSound: {fileID: 4328806835467847668}
+  attackSound: {fileID: -7126130251058106287}
+  HP: 8
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   bullet: {fileID: 1637860679798454961, guid: 6023f4192c3d94c48af1dd551c6c273b, type: 3}
-  bulletSpeed: 7
---- !u!82 &-4655112179156080170
+  bulletSpeed: 5
+  angle: 15
+--- !u!82 &4328806835467847668
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,7 +271,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &-2650997136731378005
+--- !u!82 &-7126130251058106287
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,7 +283,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c115702c806d67846b70e68968e32879, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.73
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -438,7 +438,7 @@ PrefabInstance:
     - target: {fileID: 6317578925029434746, guid: 9df7430262878fb4f8573cc48f31d3a0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a977f286665d0f64dbc13152815f7b53, type: 2}
+      objectReference: {fileID: 2100000, guid: e20bde24409b4eb4b9bd76dc2853c291, type: 2}
     - target: {fileID: 6829333093618665122, guid: 9df7430262878fb4f8573cc48f31d3a0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -446,7 +446,7 @@ PrefabInstance:
     - target: {fileID: 7202271454713460447, guid: 9df7430262878fb4f8573cc48f31d3a0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: a977f286665d0f64dbc13152815f7b53, type: 2}
+      objectReference: {fileID: 2100000, guid: e20bde24409b4eb4b9bd76dc2853c291, type: 2}
     - target: {fileID: 8100320773420232829, guid: 9df7430262878fb4f8573cc48f31d3a0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

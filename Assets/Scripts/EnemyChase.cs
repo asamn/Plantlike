@@ -12,14 +12,14 @@ public class EnemyChase : MonoBehaviour
     [SerializeField] protected GameObject deathEffect; //particle system
     protected float distance;
     protected Vector3 attackPoint;
-    [SerializeField] protected float attackRange = 1f;
+    [SerializeField] private float attackRange = 1f;
     [SerializeField] protected float aggroRange = 20f;
     [SerializeField] protected float attackCooldown = 2.0f;
     protected float attackCooldownTimer = 0.0f;
     [SerializeField] protected int XPReward = 1;
     [SerializeField] protected float attackDamage = 5f;
 
-    [SerializeField] protected Animator animator;
+    protected Animator animator;
 
     [SerializeField] protected AudioSource hurtSound,attackSound;
 

@@ -5,10 +5,23 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource music,ambience,projectile,hurt,lvlUp,slimeHit;
+
+    //singleton
+    public static AudioManager instance;
     // Start is called before the first frame update
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        //singleton to prevent duplicate managers
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+        
         StartMusic();
     }
 

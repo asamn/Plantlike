@@ -16,8 +16,20 @@ public class SavedUserOptions : MonoBehaviour
         return worldSize;
     }
 
+    //singleton
+    public static SavedUserOptions instance;
+
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        //singleton to prevent duplicate managers
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

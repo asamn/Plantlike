@@ -164,8 +164,7 @@ MonoBehaviour:
   aggroRange: 20
   attackCooldown: 2
   XPReward: 15
-  attackDamage: 20
-  animator: {fileID: 0}
+  attackDamage: 24
   hurtSound: {fileID: 3324678432018861728}
   attackSound: {fileID: 4805274339498728724}
   HP: 40

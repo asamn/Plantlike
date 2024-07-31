@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyRanged : EnemyChase
 {
 
-    [SerializeField] private GameObject bullet;
-    [SerializeField] private float bulletSpeed;
+    [SerializeField] protected GameObject bullet;
+    [SerializeField] protected float bulletSpeed;
     protected override void Update()
     {
         if (player != null)
@@ -44,7 +44,8 @@ public class EnemyRanged : EnemyChase
         }
     }
 
-    protected override void Attack(){
+    protected override void Attack()
+    {
         attackSound.Play();
         //attack animation
         //print("ATTACKED: " + attackPoint);

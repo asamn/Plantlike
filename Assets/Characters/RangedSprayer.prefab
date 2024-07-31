@@ -167,7 +167,6 @@ MonoBehaviour:
   attackCooldown: 0.5
   XPReward: 2
   attackDamage: 5
-  animator: {fileID: 0}
   hurtSound: {fileID: 4328806835467847668}
   attackSound: {fileID: -7126130251058106287}
   HP: 5

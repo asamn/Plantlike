@@ -8,21 +8,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float playerSpeed = 2f;
     private float speedCap = 15f;
     [SerializeField] private float rotationSpeed = 5.0f;
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
-
     [SerializeField] private TMP_Text levelText;
-
-    [SerializeField] private GameObject gm;
-
+    [SerializeField] private GameObject gm, playerModel, corpse, bulletPrefab;
     private AudioManager am;
-
+    private Animator animator;
     private int level = 1;
-
     //public float iFrameCooldown = 1f; //how many invincibility frames?
     //private float iFrameCooldownTimer;
-
     public float maxHealth = 100f;
     [SerializeField]private float currentHealth;
     public HealthBar healthBar;
@@ -30,15 +24,12 @@ public class PlayerController : MonoBehaviour
     public int damage = 1;
     private int dungeonLvl = 1;
     public float bulletSpeed = 5.0f;
-
     
-
     public float maxXP = 100f;
     private float currentXP;
     public XPBar xpBar;
     private Rigidbody rb;
-    private Vector3 movement;
-    private Vector3 aimDirection;
+    private Vector3 movement, aimDirection;
 
     void Awake()
     {
@@ -50,6 +41,10 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true; // Prevent rotation affecting movement
         rb.interpolation = RigidbodyInterpolation.Interpolate; // Smoothing the movement
         
+        animator = playerModel.GetComponent<Animator>();
+
+        animator.SetBool("isMoving",false);
+
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
@@ -125,6 +120,11 @@ public class PlayerController : MonoBehaviour
     void Die(){
         Debug.Log("Player died! ");
         gm.GetComponent<GameManager>().ShowDeathScreen();
+        am.StopMusic();
+        am.StopAmbience();
+
+        Instantiate(corpse, transform.position + (Vector3.up * 0.05f), transform.rotation);
+
         Destroy(this.gameObject);
     }
 
@@ -208,6 +208,17 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(horizontal) < 0.1f) horizontal = 0;
         if (Mathf.Abs(vertical) < 0.1f) vertical = 0;
 
+
+        if (horizontal != 0 || vertical != 0)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+
+
         movement = new Vector3(horizontal, 0, vertical);
         if (movement.sqrMagnitude > 1)
         {
@@ -231,6 +242,15 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
+        if (horizontal != 0 || vertical != 0)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+
         movement = new Vector3(horizontal, 0, vertical);
         if (movement.sqrMagnitude > 1)
         {
@@ -251,8 +271,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ApplyMovement(){
-        
+    private void ApplyMovement()
+    {    
         rb.velocity = movement;
     }
 

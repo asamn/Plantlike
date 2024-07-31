@@ -144,11 +144,10 @@ MonoBehaviour:
   aggroRange: 10
   attackCooldown: 1
   XPReward: 1
-  attackDamage: 10
-  animator: {fileID: 0}
+  attackDamage: 15
   hurtSound: {fileID: 3857253476767232423}
   attackSound: {fileID: 5518885523073134973}
-  HP: 10
+  HP: 11
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
