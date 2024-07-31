@@ -18,6 +18,7 @@ public class TitleScreen : MonoBehaviour
     void Awake()
     {
         am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        savedUserOptions = GameObject.Find("SavedUserOptions");
     }
 
     public void StartGame()
@@ -46,6 +47,10 @@ public class TitleScreen : MonoBehaviour
         else
         {
             selectedWorldSize = size;
+        }
+        if (savedUserOptions == null)
+        {
+            savedUserOptions = GameObject.Find("SavedUserOptions");
         }
         savedUserOptions.GetComponent<SavedUserOptions>().setWorldSize(selectedWorldSize);
     }

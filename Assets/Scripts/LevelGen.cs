@@ -181,6 +181,7 @@ public class LevelGen : MonoBehaviour
             if (currentConnector.GetComponent<Room>().isOverlapping())
             {
                 //print("OVERLAP! CONNECTOR");
+                currentRoomCount++;
                 DestroyPiece(currentConnector, m);
                 continue; //do not run below code, 
             }
@@ -204,6 +205,7 @@ public class LevelGen : MonoBehaviour
             case "North":
                 if (currentRoom.GetComponent<Room>().GetSouthMarker() == null) //if the room trying to spawn doesn't have a south connection point, don't bother spawning it, it will count as an overlap
                 {
+                    currentRoomCount++;
                     DestroyPiece(currentRoom, m);
                     DestroyPiece(currentConnector, m);
                     continue; //dont run below codes
@@ -215,6 +217,7 @@ public class LevelGen : MonoBehaviour
             case "East":
                 if (currentRoom.GetComponent<Room>().GetWestMarker() == null)
                 {
+                    currentRoomCount++;
                     DestroyPiece(currentRoom, m);
                     DestroyPiece(currentConnector, m);
                     continue;
@@ -226,6 +229,7 @@ public class LevelGen : MonoBehaviour
             case "South":
                 if (currentRoom.GetComponent<Room>().GetNorthMarker() == null)
                 {
+                    currentRoomCount++;
                     DestroyPiece(currentRoom, m);
                     DestroyPiece(currentConnector, m);
                     continue;
@@ -237,6 +241,7 @@ public class LevelGen : MonoBehaviour
             case "West":
                 if (currentRoom.GetComponent<Room>().GetEastMarker() == null)
                 {
+                    currentRoomCount++;
                     DestroyPiece(currentRoom, m);
                     DestroyPiece(currentConnector, m);
                     continue;
@@ -266,6 +271,7 @@ public class LevelGen : MonoBehaviour
             //Check overlap of the spawned room, also destroy the connector 
             if (currentRoom.GetComponent<Room>().isOverlapping())
             {
+                currentRoomCount++;
                 //print("OVERLAP!");
                 DestroyPiece(currentRoom, m);
                 DestroyPiece(currentConnector, m);
@@ -300,7 +306,6 @@ public class LevelGen : MonoBehaviour
     void DestroyPiece(GameObject o, Marker m)
     {
         m.fillWall();
-        currentRoomCount++; //retry the room
         Destroy(o);
     }
 
