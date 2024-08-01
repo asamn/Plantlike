@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public XPBar xpBar;
     private Rigidbody rb;
     private Vector3 movement, aimDirection;
+    private bool isDead;
 
     void Awake()
     {
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
+        isDead = false;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; // Prevent rotation affecting movement
         rb.interpolation = RigidbodyInterpolation.Interpolate; // Smoothing the movement
@@ -112,13 +114,18 @@ public class PlayerController : MonoBehaviour
 
         if(currentHealth <= 0){
             currentHealth = 0;
-            Die();
+            if (!isDead)
+            {
+                Die();
+            }
+            
         }
 
         healthBar.SetHealth(currentHealth);
     }
     void Die(){
         Debug.Log("Player died! ");
+        isDead = true;
         gm.GetComponent<GameManager>().ShowDeathScreen();
         am.StopMusic();
         am.StopAmbience();
@@ -148,7 +155,7 @@ public class PlayerController : MonoBehaviour
     {
         maxHealth += amount;
         healthBar.SetMaxHealth(maxHealth);
-        healHealth(amount * 0.25f);
+        healHealth(amount * 0.55f);
 
     }
     public void healHealth (float amount)
