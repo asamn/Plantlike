@@ -140,4 +140,18 @@ public class EnemyChase : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint, attackRange); //this only draws one sphere
     }
 
+    public void takeDamage(float amount){
+        Debug.Log(HP + " " + amount);
+        HP -= (int) amount;
+
+        Debug.Log("Damage taken! Current HP = " + HP);
+
+        if(HP <= 0){
+            HP = 0;
+            Die();
+        }
+    }
+
+
+
 }
