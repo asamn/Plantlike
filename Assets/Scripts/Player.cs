@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject gm, playerModel, corpse, bulletPrefab;
     private AudioManager am;
     private Animator animator;
+    [SerializeField] private string playerClass = "Soldier";
+    [SerializeField] private GameObject gm;
+
+
     private int level = 1;
     //public float iFrameCooldown = 1f; //how many invincibility frames?
     //private float iFrameCooldownTimer;
@@ -53,6 +57,7 @@ public class PlayerController : MonoBehaviour
         currentXP = 0f;
         xpBar.SetMaxXP(maxXP);
         dungeonLvl = 1;
+        levelText.text = (playerClass + " LVL: " + level);
     }
 
     void Update()
@@ -94,9 +99,9 @@ public class PlayerController : MonoBehaviour
             currentXP = 0;
             level++;
             Debug.Log("Level Up!");
-            levelText.text = ("LVL: " + level);
             healHealth(level * 10);
             am.PlayLevelUp();
+            levelText.text = (playerClass + " LVL: " + level);
         }
 
         xpBar.SetXP(currentXP);
