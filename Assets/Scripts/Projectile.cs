@@ -34,10 +34,6 @@ public class Projectile : MonoBehaviour
                 enemy = collision.gameObject;
                 enemy.GetComponent<EnemyChase>().TakeDamage(damage);
                 hitObject = true;
-            
-                //Debug.Log("Enemy Health: " + collision.gameObject);
-                //collision.gameObject.GetComponent<EnemyChase>().takeDamage(20f);
-                //Destroy(collision.gameObject);
             }
             Destroy(this.gameObject);
         }        
