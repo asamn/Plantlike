@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     public float projectileSpeed = 5.5f; //this will be set by the player.cs 
     [SerializeField] protected float timeout = 4.0f;
 
-    protected int damage = 1; //this will be set by the player.cs
+    protected float damage = 1; //this will be set by the player.cs
     protected bool hitObject = false;
 
     private GameObject enemy;
@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour
             Destroy(this.gameObject);
         }        
     }
-    public void setDamage (int dmg)
+    public void setDamage (float dmg)
     {
         damage = dmg;
     }

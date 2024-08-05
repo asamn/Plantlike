@@ -23,7 +23,7 @@ public class EnemyChase : MonoBehaviour
 
     [SerializeField] protected AudioSource hurtSound,attackSound;
 
-    public int HP = 5;
+    public float HP = 5;
    // private float lastAttackTime = 0.0f;
     public LayerMask playerLayer;
 
@@ -107,7 +107,7 @@ public class EnemyChase : MonoBehaviour
         }   
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         hurtSound.Play();
         animator.SetTrigger("hit"); //trigger the hurt anim

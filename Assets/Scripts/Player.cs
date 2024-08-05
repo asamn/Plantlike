@@ -14,8 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject gm, playerModel, corpse, bulletPrefab;
     private AudioManager am;
     private Animator animator;
-    [SerializeField] private string playerClass = "Soldier";
-    [SerializeField] private GameObject gm;
+    [SerializeField] private string playerClass;
 
 
     private int level = 1;
@@ -25,7 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float currentHealth;
     public HealthBar healthBar;
 
-    public int damage = 1;
+    public float damage = 1f;
     private int dungeonLvl = 1;
     public float bulletSpeed = 5.0f;
     
@@ -35,6 +34,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 movement, aimDirection;
     private bool isDead;
+    [SerializeField] private ClassDropdown classDropdown;
+    private float nextFireTime = 0f;
+    private float fireRate = 0f;
+    private int projectileCount;
+    private float spreadAngle = 0f;
 
     void Awake()
     {
@@ -57,7 +61,11 @@ public class PlayerController : MonoBehaviour
         currentXP = 0f;
         xpBar.SetMaxXP(maxXP);
         dungeonLvl = 1;
+        classDropdown = FindObjectOfType<ClassDropdown>();
+        playerClass = (classDropdown == null) ? "Sharpshooter" : classDropdown.GetCharacterClass();
+        Debug.Log("Player Class: " + playerClass);
         levelText.text = (playerClass + " LVL: " + level);
+        SetClassVariables();
     }
 
     void Update()
@@ -71,24 +79,49 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
     }
 
-    private void FireProjectile()
-    {
-        if (bulletPrefab && bulletSpawnPoint)
+    private void FireProjectile(int numberOfProjectiles){
+        if (bulletPrefab && bulletSpawnPoint && Time.time >= nextFireTime)
         {
+            /**
+            if(playerClass == "Shredder"){
+
+            }
             Projectile bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Projectile>();
             bullet.setDamage(damage); //set to the player's damage
             bullet.setSpeed(bulletSpeed); 
             am.PlayProjectile();
-        }
-        /*
-        else if (bulletPrefab)
-        {
-            Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
-        }
-        */
-        else
-        {
-            print("ERROR SPAWNING BULLET! ");
+            nextFireTime = Time.time + fireRate;
+            }
+        
+            //else if (bulletPrefab)
+            //{
+            //    Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
+            //}
+        
+            else
+            {
+                print("ERROR SPAWNING BULLET! ");
+            }
+            **/
+            for (int i = 0; i < numberOfProjectiles; i++){
+            // Generate a random spread direction
+            float spreadX = Random.Range(-spreadAngle, spreadAngle);
+            float spreadY = Random.Range(-spreadAngle, spreadAngle);
+            float spreadZ = Random.Range(-spreadAngle, spreadAngle);
+
+            // Create a new rotation with added spread
+            Quaternion spreadRotation = Quaternion.Euler(
+                bulletSpawnPoint.rotation.eulerAngles.x,
+                bulletSpawnPoint.rotation.eulerAngles.y + spreadY,
+                bulletSpawnPoint.rotation.eulerAngles.z + spreadZ
+            );
+
+            // Instantiate the bullet with the spread rotation
+            Projectile bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, spreadRotation).GetComponent<Projectile>();
+            bullet.setDamage(damage);
+            bullet.setSpeed(bulletSpeed); 
+            }
+            nextFireTime = Time.time + fireRate;
         }
     }
 
@@ -111,7 +144,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float amount){
         Debug.Log(currentHealth + " " + amount);
 
-        am.PlayHurt();
+        //am.PlayHurt();
 
         currentHealth -= amount;
 
@@ -127,6 +160,7 @@ public class PlayerController : MonoBehaviour
         }
 
         healthBar.SetHealth(currentHealth);
+        am.PlayHurt();
     }
     void Die(){
         Debug.Log("Player died! ");
@@ -196,18 +230,18 @@ public class PlayerController : MonoBehaviour
         if (useGamepad)
         {
             HandleGamepadInput();
-            if (Input.GetButtonDown("FireGamepad")) // Use right bumper for gamepad fire button
+            if (Input.GetButton("FireGamepad")) // Use right bumper for gamepad fire button
             {
                 // Debug.Log("Right Bumper Pressed"); // Debug log
-                FireProjectile();
+                FireProjectile(projectileCount);
             }
         }
         else
         {
             HandleKeyboardMouseInput();
-            if (Input.GetMouseButtonDown(0)) // Left mouse button for firing
+            if (Input.GetMouseButton(0)) // Left mouse button for firing
             {
-                FireProjectile();
+                FireProjectile(projectileCount);
             }
         }
     }
@@ -302,5 +336,29 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void SetClassVariables(){
+        if(playerClass == "Sharpshooter"){
+            fireRate = .9f;
+            damage = 2f;
+            bulletSpeed = 6f;
+            projectileCount = 1;
+        }
+        else if(playerClass == "Shredder"){
+            fireRate = 1.25f;
+            damage = .5f;
+            bulletSpeed = 3f;
+            spreadAngle = 20f;
+            projectileCount = 8;
+
+        }
+        else if(playerClass == "Sprayer"){
+            fireRate = .5f;
+            damage = 1f;
+            bulletSpeed = 3f;
+            projectileCount = 1;
+        }
+    }
+
 }
+
 

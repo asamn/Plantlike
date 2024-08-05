@@ -9,16 +9,18 @@ public class TitleScreen : MonoBehaviour
 {
     private GameObject flower;
     private int selectedWorldSize = 3;
-    [SerializeField] private GameObject startButton, quitButton;
+    [SerializeField] private GameObject startButton, quitButton, dropdown;
     [SerializeField] private GameObject worldOptions, savedUserOptions;
 
     [SerializeField] private TMP_Text startButtonText;
+    [SerializeField] private GameObject classDropdown;
     private AudioManager am;
 
     void Awake()
     {
         am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
         savedUserOptions = GameObject.Find("SavedUserOptions");
+        classDropdown = GameObject.Find("ClassDropdown");
     }
 
     public void StartGame()
@@ -33,6 +35,7 @@ public class TitleScreen : MonoBehaviour
     {
         startButton.SetActive(false);
         quitButton.SetActive(false);
+        dropdown.SetActive(false);
 
         worldOptions.SetActive(true);
     }
@@ -69,5 +72,10 @@ public class TitleScreen : MonoBehaviour
     public void onHoverExit(GameObject o)
     {
         o.SetActive(false);
+    }
+
+    public void ClassDropdownChoose(int index)
+    {
+        classDropdown.GetComponent<ClassDropdown>().ClassDropdownChoose(0);
     }
 }

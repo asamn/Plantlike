@@ -59,7 +59,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.48852894}
+  m_Size: {x: 1, y: 1, z: 0.4885289}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4646596559314548183
 Rigidbody:
@@ -114,7 +114,6 @@ MonoBehaviour:
   attackCooldown: 2
   XPReward: 2
   attackDamage: 20
-  animator: {fileID: 0}
   hurtSound: {fileID: 518714834315203792}
   attackSound: {fileID: -6049448187036950685}
   HP: 20
