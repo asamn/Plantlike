@@ -18,7 +18,7 @@ public class EnemyChase : MonoBehaviour
     protected float attackCooldownTimer = 0.0f;
     [SerializeField] protected int XPReward = 1;
     [SerializeField] protected float attackDamage = 5f;
-    private bool isDead = false;
+    protected bool isDead = false;
 
     protected Animator animator;
 

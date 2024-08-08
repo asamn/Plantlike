@@ -93,6 +93,7 @@ public class LevelGen : MonoBehaviour
                 if (!m.isVisited())
                 {
                     //do nothing, just fill the marker's wall
+                    print("Max room count reached ");
                     m.fillWall();
                     
                 }

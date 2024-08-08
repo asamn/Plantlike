@@ -8,6 +8,7 @@ public class BossChase : EnemyChase
     // Inherits the same code as EnemyChase
     protected override void Die()
     {
+        isDead = true;
         playerController.GainXP(XPReward);
         Instantiate(deathEffect, (this.gameObject.transform.position + Vector3.up * 0.75f), this.gameObject.transform.rotation);
 

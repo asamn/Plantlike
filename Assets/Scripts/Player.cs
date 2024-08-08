@@ -76,11 +76,11 @@ public class PlayerController : MonoBehaviour
             string[] controllers = Input.GetJoystickNames();
 
             //print("Gamepad?: " + useGamepad);
-
-            if (!useGamepad && controllers[0] != "") { //empty string denotes kb+mouse
+            
+            if (!useGamepad && controllers.Length > 0 && controllers[0] != "") { //empty string denotes kb+mouse
                 useGamepad = true;
             
-            } else if (useGamepad && controllers[0] == "") {         
+            } else if (useGamepad) {         
                 useGamepad = false;
             }
             yield return new WaitForSeconds(1.5f);
