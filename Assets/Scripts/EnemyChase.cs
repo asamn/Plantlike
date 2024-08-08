@@ -18,6 +18,7 @@ public class EnemyChase : MonoBehaviour
     protected float attackCooldownTimer = 0.0f;
     [SerializeField] protected int XPReward = 1;
     [SerializeField] protected float attackDamage = 5f;
+    private bool isDead = false;
 
     protected Animator animator;
 
@@ -35,7 +36,7 @@ public class EnemyChase : MonoBehaviour
         animator = GetComponent<Animator>();
         attackCooldownTimer = attackCooldown;
         exclamation = transform.Find("Exclamation").gameObject;
-        
+        isDead = false;
         
         //apply dungeon level scaling
         int currentDungeonLvl = playerController.getDungeonLevel();
@@ -43,8 +44,6 @@ public class EnemyChase : MonoBehaviour
         attackDamage = attackDamage * (1 + (currentDungeonLvl - 1) * 0.15f);
         HP = HP *  (int) ((float)currentDungeonLvl * 1.025f);
         XPReward = XPReward *  (int) ((float)currentDungeonLvl * 1.025f);
-
-
     }
 
     // Update is called once per frame
@@ -112,13 +111,14 @@ public class EnemyChase : MonoBehaviour
         hurtSound.Play();
         animator.SetTrigger("hit"); //trigger the hurt anim
         this.HP -= damage;
-        if (this.HP <= 0)
+        if (this.HP <= 0 && !isDead)
         {
             Die();
         }
     }
     protected virtual void Die()
     {
+        isDead = true; //prevent duplicate rewards if hit by multiple bullets in the same frame
         playerController.GainXP(XPReward);
         Instantiate(deathEffect, (this.gameObject.transform.position + Vector3.up * 0.55f), this.gameObject.transform.rotation);
 

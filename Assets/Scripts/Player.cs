@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private float speedCap = 15f;
     [SerializeField] private float rotationSpeed = 5.0f;
     [SerializeField] private Transform bulletSpawnPoint;
-    [SerializeField] private bool useGamepad = false; // Control gamepad vs keyboard/mouse
+    [SerializeField] private bool useGamepad; // Control gamepad vs keyboard/mouse
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private GameObject gm, playerModel, corpse, bulletPrefab;
     private AudioManager am;
@@ -73,12 +73,14 @@ public class PlayerController : MonoBehaviour
     //co-routine function, check for gamepads in the background
     IEnumerator CheckGamepad() {
         while (true) {
-            var controllers = Input.GetJoystickNames();
+            string[] controllers = Input.GetJoystickNames();
 
-            if (!useGamepad && controllers.Length > 0) {
+            //print("Gamepad?: " + useGamepad);
+
+            if (!useGamepad && controllers[0] != "") { //empty string denotes kb+mouse
                 useGamepad = true;
             
-            } else if (useGamepad && controllers.Length == 0) {         
+            } else if (useGamepad && controllers[0] == "") {         
                 useGamepad = false;
             }
             yield return new WaitForSeconds(1.5f);

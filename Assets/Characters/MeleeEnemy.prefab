@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2.5
-  lootChance: 0.1
+  lootChance: 0.25
   lootTablePool:
   - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
   - {fileID: 969528951342961759, guid: c91363205b7508443a7fa6f846e31434, type: 3}
