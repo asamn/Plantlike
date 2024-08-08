@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
             if (!useGamepad && controllers.Length > 0 && controllers[0] != "") { //empty string denotes kb+mouse
                 useGamepad = true;
             
-            } else if (useGamepad) {         
+            } else if (useGamepad && controllers[0] == "") {         
                 useGamepad = false;
             }
             yield return new WaitForSeconds(1.5f);
