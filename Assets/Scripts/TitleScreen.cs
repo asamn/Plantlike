@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class TitleScreen : MonoBehaviour
 {
     private GameObject flower;
     private int selectedWorldSize = 3;
     [SerializeField] private GameObject startButton, quitButton, dropdown;
-    [SerializeField] private GameObject worldOptions, savedUserOptions;
+    [SerializeField] private GameObject worldOptions, innerStart, savedUserOptions;
 
     [SerializeField] private TMP_Text startButtonText;
     [SerializeField] private GameObject classDropdown;
@@ -38,6 +39,8 @@ public class TitleScreen : MonoBehaviour
         dropdown.SetActive(false);
 
         worldOptions.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(innerStart);
+
     }
 
     public void SetWorldSize(int size)

@@ -339,21 +339,21 @@ public class PlayerController : MonoBehaviour
     private void SetClassVariables(){
         if(playerClass == "Sharpshooter"){
             fireRate = .9f;
-            damage = 2f;
-            bulletSpeed = 6f;
+            damage = 2.4f;
+            bulletSpeed = 10f;
             projectileCount = 1;
         }
         else if(playerClass == "Shredder"){
             fireRate = 1.25f;
-            damage = .5f;
-            bulletSpeed = 3f;
-            spreadAngle = 20f;
+            damage = .8f;
+            bulletSpeed = 2f;
+            spreadAngle = 40f;
             projectileCount = 8;
 
         }
         else if(playerClass == "Sprayer"){
             fireRate = .5f;
-            damage = 1f;
+            damage = 1.2f;
             bulletSpeed = 3f;
             projectileCount = 1;
         }

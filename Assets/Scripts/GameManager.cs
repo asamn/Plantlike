@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems; 
+
 [DefaultExecutionOrder(100)] 
 public class GameManager : MonoBehaviour
 {
     public Button menuButton, respawnButton;
+    [SerializeField] private GameObject respawnButtonObj;
 
     private GameObject level; 
     private GameObject player;
@@ -60,6 +63,7 @@ public class GameManager : MonoBehaviour
         menuButton.gameObject.SetActive(true);
         deathText.gameObject.SetActive(true);
         respawnButton.gameObject.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(respawnButtonObj);
 
     }
     
