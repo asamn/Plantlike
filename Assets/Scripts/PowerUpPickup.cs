@@ -8,7 +8,8 @@ enum Type
     MaxHealth,
     Damage,
     Speed,
-    BulletSpeed
+    BulletSpeed,
+    FireRate,
 }
 
 public class PowerUpPickup : MonoBehaviour
@@ -54,6 +55,9 @@ public class PowerUpPickup : MonoBehaviour
                 break;
             case Type.BulletSpeed:
                 playerController.increaseBulletSpeed (strength);
+                break;
+            case Type.FireRate:
+                playerController.increaseFireRate (strength);
                 break;
             default:
                 break;

@@ -156,7 +156,7 @@ MonoBehaviour:
   lootChance: 0.3
   lootTablePool:
   - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
-  - {fileID: 969528951342961759, guid: d41a0ccbbde55ec4396ada5e112429b9, type: 3}
+  - {fileID: 969528951342961759, guid: ee131be17cde8e7409b5d397b06780e4, type: 3}
   - {fileID: 969528951342961759, guid: c91363205b7508443a7fa6f846e31434, type: 3}
   - {fileID: 969528951342961759, guid: eddce614d9b3474409c889ca004e717c, type: 3}
   - {fileID: 969528951342961759, guid: e6b202039fc015c45bc72bce2fee832e, type: 3}

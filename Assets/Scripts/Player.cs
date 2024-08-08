@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private float speedCap = 15f;
     [SerializeField] private float rotationSpeed = 5.0f;
     [SerializeField] private Transform bulletSpawnPoint;
-    [SerializeField] private bool useGamepad = true; // Control gamepad vs keyboard/mouse
+    [SerializeField] private bool useGamepad = false; // Control gamepad vs keyboard/mouse
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private GameObject gm, playerModel, corpse, bulletPrefab;
     private AudioManager am;
@@ -36,13 +36,15 @@ public class PlayerController : MonoBehaviour
     private bool isDead;
     [SerializeField] private ClassDropdown classDropdown;
     private float nextFireTime = 0f;
-    private float fireRate = 0f;
+    private float fireRate = 1f;
     private int projectileCount;
     private float spreadAngle = 0f;
 
     void Awake()
     {
         am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        useGamepad = false;
+        StartCoroutine(CheckGamepad());
     }
     void Start()
     {
@@ -68,6 +70,21 @@ public class PlayerController : MonoBehaviour
         SetClassVariables();
     }
 
+    //co-routine function, check for gamepads in the background
+    IEnumerator CheckGamepad() {
+        while (true) {
+            var controllers = Input.GetJoystickNames();
+
+            if (!useGamepad && controllers.Length > 0) {
+                useGamepad = true;
+            
+            } else if (useGamepad && controllers.Length == 0) {         
+                useGamepad = false;
+            }
+            yield return new WaitForSeconds(1.5f);
+        }
+    }
+
     void Update()
     {
         HandleInput();
@@ -82,27 +99,6 @@ public class PlayerController : MonoBehaviour
     private void FireProjectile(int numberOfProjectiles){
         if (bulletPrefab && bulletSpawnPoint && Time.time >= nextFireTime)
         {
-            /**
-            if(playerClass == "Shredder"){
-
-            }
-            Projectile bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Projectile>();
-            bullet.setDamage(damage); //set to the player's damage
-            bullet.setSpeed(bulletSpeed); 
-            am.PlayProjectile();
-            nextFireTime = Time.time + fireRate;
-            }
-        
-            //else if (bulletPrefab)
-            //{
-            //    Instantiate(bulletPrefab, transform.position + transform.forward * 1.5f, transform.rotation);
-            //}
-        
-            else
-            {
-                print("ERROR SPAWNING BULLET! ");
-            }
-            **/
             for (int i = 0; i < numberOfProjectiles; i++){
             // Generate a random spread direction
             float spreadX = Random.Range(-spreadAngle, spreadAngle);
@@ -210,7 +206,16 @@ public class PlayerController : MonoBehaviour
     {
         damage += amount;
     }
+    public void increaseFireRate(float amount)
+    {
+        fireRate -= amount;
+        if (fireRate < 0.01f)
+        {
+            fireRate = 0.01f; //cap
+            healHealth(10 * level); //heal instead
 
+        }
+    }
     public void increaseDungeonLevel()
     {
         dungeonLvl++;
@@ -222,6 +227,29 @@ public class PlayerController : MonoBehaviour
     public void resetPosition()
     {
         transform.position = new Vector3(-1f, 0.75f,-6f);
+    }
+
+     private void SetClassVariables(){
+        if(playerClass == "Sharpshooter"){
+            fireRate = .9f;
+            damage = 2.4f;
+            bulletSpeed = 10f;
+            projectileCount = 1;
+        }
+        else if(playerClass == "Shredder"){
+            fireRate = 1.25f;
+            damage = .8f;
+            bulletSpeed = 2f;
+            spreadAngle = 40f;
+            projectileCount = 8;
+
+        }
+        else if(playerClass == "Sprayer"){
+            fireRate = .5f;
+            damage = 1.2f;
+            bulletSpeed = 3f;
+            projectileCount = 1;
+        }
     }
     //======================INPUT HANDLING====================================
     //========================================================================
@@ -336,28 +364,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SetClassVariables(){
-        if(playerClass == "Sharpshooter"){
-            fireRate = .9f;
-            damage = 2.4f;
-            bulletSpeed = 10f;
-            projectileCount = 1;
-        }
-        else if(playerClass == "Shredder"){
-            fireRate = 1.25f;
-            damage = .8f;
-            bulletSpeed = 2f;
-            spreadAngle = 40f;
-            projectileCount = 8;
-
-        }
-        else if(playerClass == "Sprayer"){
-            fireRate = .5f;
-            damage = 1.2f;
-            bulletSpeed = 3f;
-            projectileCount = 1;
-        }
-    }
+   
 
 }
 

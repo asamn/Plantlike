@@ -139,13 +139,13 @@ MonoBehaviour:
   - {fileID: 969528951342961759, guid: eddce614d9b3474409c889ca004e717c, type: 3}
   - {fileID: 969528951342961759, guid: e6b202039fc015c45bc72bce2fee832e, type: 3}
   - {fileID: 969528951342961759, guid: 9dd64133ea182b542afbdf9a51757e77, type: 3}
+  - {fileID: 969528951342961759, guid: ee131be17cde8e7409b5d397b06780e4, type: 3}
   deathEffect: {fileID: 3540182083061574896, guid: c647346febd09f640a2b959488099213, type: 3}
   attackRange: 1.6
   aggroRange: 10
   attackCooldown: 2
   XPReward: 1
   attackDamage: 5
-  animator: {fileID: 0}
   hurtSound: {fileID: 3970376225723913971}
   attackSound: {fileID: 2717314396341094027}
   HP: 5
