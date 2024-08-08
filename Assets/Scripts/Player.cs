@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
      private void SetClassVariables(){
         if(playerClass == "Sharpshooter"){
             fireRate = .9f;
-            damage = 2.4f;
+            damage = 3.2f;
             bulletSpeed = 10f;
             projectileCount = 1;
         }

@@ -40,6 +40,8 @@ public class TitleScreen : MonoBehaviour
         worldOptions.SetActive(true);
         //update the references of classdropdown with the now active world options UI
         classDropdown.Initialize();
+        GameObject.Find("Dropdown").GetComponent<TMP_Dropdown>().value = classDropdown.GetDropdownValue();
+        //classDropdown.RefreshShownValue();
         EventSystem.current.SetSelectedGameObject(innerStart);
     }
 

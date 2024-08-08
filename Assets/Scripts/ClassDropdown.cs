@@ -7,6 +7,7 @@ using TMPro;
 public class ClassDropdown : MonoBehaviour
 {
     [SerializeField] private string characterClass = "Sharpshooter";
+    [SerializeField] private int dropdownValue;
     private TMP_Dropdown dropdown;
     private static ClassDropdown instance;
 
@@ -59,12 +60,17 @@ public class ClassDropdown : MonoBehaviour
             case 1: characterClass = "Shredder"; break;
             case 2: characterClass = "Sprayer"; break;
         }
+        dropdownValue = dropdown.value;
         Debug.Log("Selected Character Class: " + characterClass);
     }
 
     public string GetCharacterClass()
     {
         return characterClass;
+    }
+
+    public int GetDropdownValue(){
+        return dropdownValue;
     }
 
     void Update()
