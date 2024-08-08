@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
      private void SetClassVariables(){
         if(playerClass == "Sharpshooter"){
             fireRate = .9f;
-            damage = 3.2f;
+            damage = 4f;
             bulletSpeed = 10f;
             projectileCount = 1;
         }
@@ -247,8 +247,8 @@ public class PlayerController : MonoBehaviour
 
         }
         else if(playerClass == "Sprayer"){
-            fireRate = .5f;
-            damage = 1.2f;
+            fireRate = .35f;
+            damage = 1.9f;
             bulletSpeed = 3f;
             projectileCount = 1;
         }
