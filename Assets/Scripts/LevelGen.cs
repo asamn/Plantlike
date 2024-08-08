@@ -41,6 +41,20 @@ public class LevelGen : MonoBehaviour
 
     public void GenerateLevel()
     {
+        //clear enemies
+    
+        GameObject[] e = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach(GameObject g in e)
+        {
+            Destroy(g);
+        }
+
+        GameObject[] p = GameObject.FindGameObjectsWithTag("Pickup");
+        foreach(GameObject g in p)
+        {
+            Destroy(g);
+        }
+        
         levelGenerated = false;
         currentRoomCount = roomCount;
         markerList = new List<GameObject>();

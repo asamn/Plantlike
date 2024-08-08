@@ -164,7 +164,7 @@ MonoBehaviour:
   deathEffect: {fileID: 3540182083061574896, guid: c647346febd09f640a2b959488099213, type: 3}
   attackRange: 1
   aggroRange: 15
-  attackCooldown: 0.5
+  attackCooldown: 0.25
   XPReward: 2
   attackDamage: 5
   hurtSound: {fileID: 4328806835467847668}
