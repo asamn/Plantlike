@@ -206,6 +206,7 @@ public class LevelGen : MonoBehaviour
             {
                 //print("Spawning boss room... ");
                 currentRoom = Instantiate(bossRoom, connectorMarker.transform.position, connectorMarker.transform.rotation);
+                currentRoom.name = "BossRoom";
             }
             else
             {
@@ -312,9 +313,23 @@ public class LevelGen : MonoBehaviour
                 markerList.Add(currentRoom.GetComponent<Room>().GetWestMarker());   
             }
         }
+
+        if (GameObject.Find("BossRoom") == null) 
+        {
+            levelGenerated = false;
+            //retry generating the level
+            print("LEVEL GEN FAILED");
+            clearLevel();
+            GenerateLevel();
+        }
+        else
+        {
+            levelGenerated = true;
+            print("Generated level of size: " + roomCount);
+        }
         
-        levelGenerated = true;
-        print("Generated level of size: " + roomCount);
+        
+        
     }
 
     //o is the room piece, m is the current marker it is trying to spawn at
